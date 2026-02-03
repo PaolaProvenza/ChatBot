@@ -1,11 +1,112 @@
-<!DOCTYPE html> //git pull origin main nella cartella_terminale per aggirnare alla versione piu recente il progetto
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SayHi!</title>
+
+    <!-- Collegamento al file CSS esterno -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- Immagine di sfondo iniziale -->
+    <img src="immagini/Inizio.png" class="img-sfondo-iniziale">
     
+    
+    <div class="right-panel">
+
+        <!-- Schermata iniziale con titolo e pulsante NEXT -->
+        <div class="start-screen" id="startScreen">
+            <h1>SayHi!</h1>
+            <p>Accedi e chatta con me. </p>
+
+            <!-- Pulsante che attiva il passaggio alla schermata di login -->
+            <button class="button" id="enterBtn">
+                <span>NEXT</span>
+
+                <!-- Icona SVG composta da tre frecce -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 43">
+                  <polygon points="39.58,4.46 44.11,0 66,21.5 44.11,43 39.58,38.54 56.94,21.5"></polygon>
+                  <polygon points="19.79,4.46 24.32,0 46.21,21.5 24.32,43 19.79,38.54 37.15,21.5"></polygon>
+                  <polygon points="0,4.46 4.53,0 26.42,21.5 4.53,43 0,38.54 17.36,21.5"></polygon>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Box del login, inizialmente nascosto -->
+        <div class="container" id="loginBox">
+            <form class="form">
+                <!-- Freccia per tornare indietro dal login -->
+                <div class="back-arrow" id="backBtn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </div>
+                <!-- Titolo del form -->
+                <p id="heading">Login</p>
+
+                <!-- Campo username -->
+                <div class="field">
+                    <input class="input-field" type="text" placeholder="Username">
+                </div>
+
+                <!-- Campo password -->
+                <div class="field">
+                    <input class="input-field" type="password" placeholder="Password">
+                </div>
+
+                <!-- Pulsanti Login e Sign Up -->
+                <div class="btn">
+                    <button class="button1" id="loginBtn">Login</button>
+                    <button class="button2">Sign Up</button>
+                </div>
+
+                <!-- Link per recupero password -->
+                <button class="button3">Forgot Password</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // Recupero degli elementi necessari
+        const btn = document.getElementById("enterBtn");
+        const start = document.getElementById("startScreen");
+        const login = document.getElementById("loginBox");
+
+        // Al click del pulsante NEXT:
+        // - nasconde la schermata iniziale
+        // - mostra il box di login
+        btn.onclick = () => {
+            start.style.display = "none";
+            login.style.display = "block";
+        };
+
+        // al click del lgin ti entra nella chat(acora da fare)
+        const loginBtn = document.getElementById("loginBtn");
+
+        loginBtn.onclick = (e) => {
+            e.preventDefault(); // evita il refresh del form
+
+            //apri la tua pagina chat.html
+            // window.location.href = "chat.html";
+
+            start.style.display = "none";
+            login.style.display = "block"; //poi andrà a none 
+
+            console.log("Login cliccato — qui aprirai la chat");
+        };
+
+        // Ritorni alla schermata iniziale quando fai click sulla freccia
+        const back = document.getElementById("backBtn");
+
+        back.onclick = () => {
+            login.style.display = "none";
+            start.style.display = "block";  // riappare la start screen
+        };
+
+    </script>
+
 </body>
 </html>

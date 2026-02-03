@@ -1,0 +1,371 @@
+/*
+   RESET & BASE
+   Imposta regole di base per uniformare il comportamento
+   degli elementi e definisce lo stile generale della pagina.
+*/
+* {
+  box-sizing: border-box; /* evita calcoli errati su padding/border */
+  font-family: Arial, Helvetica, sans-serif; /* font globale */
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background-color: rgb(19, 19, 19); /* sfondo scuro */
+  overflow: hidden; /* blocca lo scroll */
+}
+
+/*
+ SFONDO
+ Immagine fullscreen che rimane dietro al contenuto.
+*/
+.img-sfondo-iniziale {
+  position: absolute;
+  inset: 0; /* top/right/bottom/left = 0 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* riempie senza deformare */
+  z-index: -1; /* va sotto tutto */
+}
+
+/*
+ LAYOUT: COLONNA DESTRA
+ Contiene start screen e login form.
+*/
+.right-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 420px;
+  height: 100vh;
+  margin-right: 180px; /* spostamento verso sinistra */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/*
+ START SCREEN
+ Schermata iniziale con titolo, slogan e pulsante NEXT.
+*/
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  color: white;
+  animation: fadeIn 1s ease forwards; /* entrata morbida */
+}
+
+.start-screen h1 {
+  font-size: 4rem;
+  margin-bottom: 0.2em;
+}
+
+.start-screen p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin-bottom: 2em;
+}
+
+.start-screen button {
+  padding: 1em 3em;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, #1c195d, rgb(212, 0, 28));
+  color: white;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Nasconde la start screen con animazione */
+.start-screen.hide {
+  animation: fadeOut 0.6s forwards;
+  pointer-events: none; /* evita interazioni */
+}
+
+/*
+ LOGIN CONTAINER
+ Box con bordo neon e animazione di entrata.
+*/
+.container {
+  display: none; /* nascosto finché non clicchi NEXT */
+  position: relative;
+  padding: 4px;
+  border-radius: 30px;
+  overflow: hidden;
+  width: 400px;
+}
+
+.container.show {
+  display: block;
+  animation: slideIn 0.8s ease forwards; /* entra da destra */
+}
+
+/* Bordo neon esterno */
+.container::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  background: linear-gradient(0deg, #1c195d, rgb(212, 0, 28), #1c195d);
+  border-radius: 30px;
+  filter: blur(10px); /* glow */
+  z-index: -1;
+}
+
+/* Rotazione del glow al passaggio del mouse */
+.container:hover::before {
+  animation: rotateGlow 3.5s;
+}
+
+/*
+ FORM
+ Contenuto interno del login: campi e pulsanti.
+*/
+.form {
+  background-color: #171717;
+  border-radius: 25px;
+  padding: 3em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: white;
+}
+
+#heading {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 1em;
+}
+
+/* Campo input con effetto incavo */
+.field {
+  margin-bottom: 1em;
+  padding: 0.9em;
+  border-radius: 25px;
+  background-color: #171717;
+  box-shadow: inset 2px 5px 10px rgb(5, 5, 5); /* effetto profondità */
+}
+
+/* Input vero e proprio */
+.input-field {
+  width: 100%;
+  padding: 0.6em;
+  border-radius: 15px;
+  border: none;
+  background: #111;
+  color: white;
+}
+
+/*
+ BOTTONE NEXT (ANIMATO)
+ Pulsante con ripple, glow e frecce animate.
+ */
+.button {
+  --main-size: 1.1em;
+  --color-text: #ffffff;
+  --color-background: #ff135a;
+  --color-background-hover: #ff1472;
+  --color-outline: #ff145a40;
+  --color-shadow: #00000040;
+
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: calc(var(--main-size) * 100);
+  padding: 0.33em 0 0.33em 0.66em;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: var(--main-size);
+  color: var(--color-text);
+  background: var(--color-background);
+  box-shadow: 0 0 0.2em 0 var(--color-background);
+  transition: 1s;
+}
+
+.button:active {
+  transform: scale(0.95);
+}
+
+.button:hover {
+  outline: 0.1em solid transparent;
+  outline-offset: 0.2em;
+  box-shadow: 0 0 1em 0 var(--color-background);
+  animation: ripple 1s linear infinite, colorize 1s infinite;
+  transition: 0.5s;
+}
+
+/* Contenitore dei pulsanti Login e Sign Up */
+.btn {
+  display: flex;              /* li mette in riga */
+  gap: 10px;                  /* spazio tra i due pulsanti */
+  width: 100%;                /* occupano tutta la larghezza del form */
+  margin-top: 10px;
+}
+
+/* Pulsanti perfettamente uguali */
+.button1,
+.button2 {
+  flex: 1;                    /* stessa larghezza */
+  text-align: center;         /* centra il testo */
+}
+
+/* Testo del bottone */
+.button span {
+  margin-right: 0.3em;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  text-shadow: 5px 5px 5px var(--color-shadow);
+}
+
+/* Icona SVG */
+.button svg {
+  height: 0.8em;
+  fill: var(--color-text);
+  margin-right: -0.16em;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button:hover svg {
+  margin-right: 0.66em;
+  filter: drop-shadow(5px 5px 2.5px var(--color-shadow));
+}
+
+/* Frecce animate */
+.button svg polygon:nth-child(1) {
+  transform: translateX(-60%);
+  transition: 0.4s;
+}
+
+.button svg polygon:nth-child(2) {
+  transform: translateX(-30%);
+  transition: 0.5s;
+}
+
+.button:hover svg polygon:nth-child(1) {
+  transform: translateX(0%);
+  animation: opacity 1s infinite 0.6s;
+}
+
+.button:hover svg polygon:nth-child(2) {
+  transform: translateX(0%);
+  animation: opacity 1s infinite 0.4s;
+}
+
+.button:hover svg polygon:nth-child(3) {
+  animation: opacity 1s infinite 0.2s;
+}
+
+/* BOTTONI LOGIN / SIGNUP / FORGOT */
+.button1,
+.button2,
+.button3 {
+  background-color: #252525;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.8em 1.4em;
+  cursor: pointer;
+  flex: 1;
+  transition: 0.3s ease-in-out;
+}
+
+.button1:hover,
+.button2:hover {
+  background-color: black;
+}
+
+.button3 {
+  margin-top: 1em;
+  width: 100%;
+}
+
+.button3:hover {
+  background-color: red;
+}
+/* Freccia indietro */
+.back-arrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0,0,0,0.4);
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Icona */
+.back-arrow svg {
+  width: 22px;
+  height: 22px;
+  stroke: white;
+  stroke-width: 2.5;
+  fill: none;
+  transition: transform 0.3s ease;
+}
+
+/* Animazione freccia */
+.back-arrow:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgb(212, 0, 28);
+}
+
+.back-arrow:hover svg {
+  transform: translateX(-4px); /* movimento verso sinistra */
+}
+
+
+/*ANIMAZIONI GLOBALI*/
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(180deg); }
+}
+
+@keyframes opacity {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes colorize {
+  0% { background: var(--color-background); }
+  50% { background: var(--color-background-hover); }
+  100% { background: var(--color-background); }
+}
+
+@keyframes ripple {
+  0% { outline: 0em solid transparent; outline-offset: -0.1em; }
+  50% { outline: 0.2em solid var(--color-outline); outline-offset: 0.2em; }
+  100% { outline: 0.4em solid transparent; outline-offset: 0.4em; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
