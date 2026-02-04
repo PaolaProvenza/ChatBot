@@ -1,75 +1,64 @@
-/*
-   RESET & BASE
-   Imposta regole di base per uniformare il comportamento
-   degli elementi e definisce lo stile generale della pagina.
-*/
+/* BASE & RESET */
 * {
-  box-sizing: border-box; /* evita calcoli errati su padding/border */
-  font-family: Arial, Helvetica, sans-serif; /* font globale */
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
   margin: 0;
   height: 100vh;
-  background-color: rgb(19, 19, 19); /* sfondo scuro */
-  overflow: hidden; /* blocca lo scroll */
+  background-color: rgb(19, 19, 19);
+  overflow: hidden;
 }
 
-/*
- SFONDO
- Immagine fullscreen che rimane dietro al contenuto.
-*/
-.video{
+/* SFONDO */
+.video {
   position: fixed;
-    top:0;
-    left:0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -2;
-    filter: brightness(0.5); /* scurisce il video */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  filter: brightness(0.5);
 }
 
 .img-sfondo-iniziale {
   position: absolute;
-  inset: 0; /* top/right/bottom/left = 0 */
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* riempie senza deformare */
-  z-index: -1; /* va sotto tutto */
+  object-fit: cover;
+  z-index: -1;
 }
 
-/*
- LAYOUT: COLONNA DESTRA
- Contiene start screen e login form.
-*/
+/* LAYOUT RIGHT PANEL */
 .right-panel {
   position: absolute;
   right: 0;
   top: 0;
   width: 420px;
   height: 100vh;
-  margin-right: 180px; /* spostamento verso sinistra */
-
+  margin-right: 180px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-/*
- START SCREEN
- Schermata iniziale con titolo, slogan e pulsante NEXT.
-*/
+/* START SCREEN */
 .start-screen {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* centratura verticale */
+  align-items: center;     /* centratura orizzontale */
   gap: 3px;
   color: white;
-  animation: fadeIn 1s ease forwards; /* entrata morbida */
+  width: 100%;             /* aggiunto */
+  height: 100%;            /* aggiunto */
+  animation: fadeIn 1s ease forwards;
 }
+
 
 .start-screen h1 {
   font-size: 4rem;
@@ -92,18 +81,14 @@ body {
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-/* Nasconde la start screen con animazione */
 .start-screen.hide {
   animation: fadeOut 0.6s forwards;
-  pointer-events: none; /* evita interazioni */
+  pointer-events: none;
 }
 
-/*
- LOGIN CONTAINER
- Box con bordo neon e animazione di entrata.
-*/
+/* LOGIN CONTAINER */
 .container {
-  display: none; /* nascosto finché non clicchi NEXT */
+  display: none; /* rimane nascosto finché non clicchi NEXT */
   position: relative;
   padding: 4px;
   border-radius: 30px;
@@ -113,30 +98,26 @@ body {
 
 .container.show {
   display: block;
-  animation: slideIn 0.8s ease forwards; /* entra da destra */
+  animation: slideIn 0.8s ease forwards;
 }
 
-/* Bordo neon esterno */
 .container::before {
   content: "";
   position: absolute;
   inset: -4px;
   background: linear-gradient(0deg, #1c195d, rgb(212, 0, 28), #1c195d);
   border-radius: 30px;
-  filter: blur(10px); /* glow */
+  filter: blur(10px);
   z-index: -1;
 }
 
-/* Rotazione del glow al passaggio del mouse */
 .container:hover::before {
   animation: rotateGlow 3.5s;
 }
 
-/*
- FORM
- Contenuto interno del login: campi e pulsanti.
-*/
-.form {
+/* FORM LOGIN E SIGNUP */
+.form,
+.form2 {
   background-color: #171717;
   border-radius: 25px;
   padding: 3em;
@@ -145,6 +126,7 @@ body {
   flex-direction: column;
   gap: 14px;
   color: white;
+  position: relative;
 }
 
 #heading {
@@ -153,16 +135,15 @@ body {
   margin-bottom: 1em;
 }
 
-/* Campo input con effetto incavo */
+/* CAMPI INPUT */
 .field {
   margin-bottom: 1em;
   padding: 0.9em;
   border-radius: 25px;
   background-color: #171717;
-  box-shadow: inset 2px 5px 10px rgb(5, 5, 5); /* effetto profondità */
+  box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
 }
 
-/* Input vero e proprio */
 .input-field {
   width: 100%;
   padding: 0.6em;
@@ -172,10 +153,7 @@ body {
   color: white;
 }
 
-/*
- BOTTONE NEXT (ANIMATO)
- Pulsante con ripple, glow e frecce animate.
- */
+/* BOTTONE NEXT ANIMATO */
 .button {
   --main-size: 1.1em;
   --color-text: #ffffff;
@@ -211,7 +189,6 @@ body {
   animation: ripple 1s linear infinite, colorize 1s infinite;
   transition: 0.5s;
 }
-
 /* Contenitore dei pulsanti Login e Sign Up */
 .btn {
   display: flex;              /* li mette in riga */
@@ -226,8 +203,6 @@ body {
   flex: 1;                    /* stessa larghezza */
   text-align: center;         /* centra il testo */
 }
-
-/* Testo del bottone */
 .button span {
   margin-right: 0.3em;
   transition: 0.5s;
@@ -237,7 +212,6 @@ body {
   text-shadow: 5px 5px 5px var(--color-shadow);
 }
 
-/* Icona SVG */
 .button svg {
   height: 0.8em;
   fill: var(--color-text);
@@ -251,7 +225,6 @@ body {
   filter: drop-shadow(5px 5px 2.5px var(--color-shadow));
 }
 
-/* Frecce animate */
 .button svg polygon:nth-child(1) {
   transform: translateX(-60%);
   transition: 0.4s;
@@ -276,7 +249,7 @@ body {
   animation: opacity 1s infinite 0.2s;
 }
 
-/* BOTTONI LOGIN / SIGNUP / FORGOT */
+/* BOTTONE LOGIN / SIGNUP / FORGOT */
 .button1,
 .button2,
 .button3 {
@@ -303,7 +276,8 @@ body {
 .button3:hover {
   background-color: red;
 }
-/* Freccia indietro */
+
+/* FRECCE INDIETRO */
 .back-arrow {
   position: absolute;
   top: 20px;
@@ -315,14 +289,13 @@ body {
   justify-content: center;
   align-items: center;
 
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 50%;
   backdrop-filter: blur(4px);
 
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Icona */
 .back-arrow svg {
   width: 22px;
   height: 22px;
@@ -332,18 +305,16 @@ body {
   transition: transform 0.3s ease;
 }
 
-/* Animazione freccia */
 .back-arrow:hover {
   transform: scale(1.15);
   box-shadow: 0 0 12px rgb(212, 0, 28);
 }
 
 .back-arrow:hover svg {
-  transform: translateX(-4px); /* movimento verso sinistra */
+  transform: translateX(-4px);
 }
 
-
-/*ANIMAZIONI GLOBALI*/
+/* ANIMAZIONI */
 @keyframes rotateGlow {
   from { transform: rotate(0deg); }
   to { transform: rotate(180deg); }
