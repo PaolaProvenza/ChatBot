@@ -19,6 +19,17 @@ body {
  SFONDO
  Immagine fullscreen che rimane dietro al contenuto.
 */
+.video{
+  position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    filter: brightness(0.5); /* scurisce il video */
+}
+
 .img-sfondo-iniziale {
   position: absolute;
   inset: 0; /* top/right/bottom/left = 0 */
