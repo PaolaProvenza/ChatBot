@@ -24,27 +24,40 @@
   right:0;
   height:5rem;
   background-color: rgb(19, 6, 31);
-  z-index: -2;
+  z-index: 10;
 }
 /*TITOLO*/
 .titolo {
-    font-size: 3rem;
-    margin-bottom: 0.2em;
-    color: #ffffff;
-    text-align: center;
-    margin-top: 0.3em;
-    z-index: -1;
+  font-size: 3rem;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 0.3em;
+  z-index: 11;
+  position: relative;
 }
+
 /*LOGO*/
-.logo{
-    margin-top: 0.3em;
-    margin-left: 0.3em;
-    z-index: -1;
-    width: auto;
-    height:5rem;
+.logo {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  height: 5rem;
+  z-index: 12;
 }
-.img-logo{
-    width: auto;
-    height:3rem;
-    z-index: -1;
+
+.img-logo {
+  height: 4rem;
+  width: auto;
+}
+
+/*CHAT FRAME*/
+.frame-chat{
+  position: absolute;
+  top: 10rem;
+  left: 15rem;
+  right: 15rem;
+  height: 70vh;
+  background-color: rgb(19, 6, 31);
+  border-radius: 20px;
+  z-index: 12;
 }
