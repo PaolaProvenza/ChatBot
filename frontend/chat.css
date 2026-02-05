@@ -1,0 +1,50 @@
+/*SFONDO*/
+.chat-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+.img-sfondo-chat{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.5);
+}
+/*BARRA*/
+.barra{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:5rem;
+  background-color: rgb(19, 6, 31);
+  z-index: -2;
+}
+/*TITOLO*/
+.titolo {
+    font-size: 3rem;
+    margin-bottom: 0.2em;
+    color: #ffffff;
+    text-align: center;
+    margin-top: 0.3em;
+    z-index: -1;
+}
+/*LOGO*/
+.logo{
+    margin-top: 0.3em;
+    margin-left: 0.3em;
+    z-index: -1;
+    width: auto;
+    height:5rem;
+}
+.img-logo{
+    width: auto;
+    height:3rem;
+    z-index: -1;
+}

@@ -1,7 +1,7 @@
 /* BASE & RESET */
 * {
   box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'comfortaa',Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -22,7 +22,6 @@ body {
   z-index: -2;
   filter: brightness(0.5);
 }
-
 .img-sfondo-iniziale {
   position: absolute;
   inset: 0;
@@ -59,10 +58,10 @@ body {
   animation: fadeIn 1s ease forwards;
 }
 
-
 .start-screen h1 {
-  font-size: 4rem;
+  font-size: 6rem;
   margin-bottom: 0.2em;
+  color: #ffffff;
 }
 
 .start-screen p {
@@ -313,7 +312,13 @@ body {
 .back-arrow:hover svg {
   transform: translateX(-4px);
 }
-
+/*FONT UTILI*/
+@font-face {
+  font-family: 'comfortaa';
+  src: url('font/Comfortaa-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 /* ANIMAZIONI */
 @keyframes rotateGlow {
   from { transform: rotate(0deg); }
