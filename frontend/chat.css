@@ -18,33 +18,42 @@
 }
 /*BARRA*/
 .barra{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  height:5rem;
+   position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5rem;
   background-color: rgb(19, 6, 31);
-  z-index: -2;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  z-index: 10;
 }
 /*TITOLO*/
 .titolo {
-    font-size: 3rem;
-    margin-bottom: 0.2em;
-    color: #ffffff;
-    text-align: center;
-    margin-top: 0.3em;
-    z-index: -1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: -0.5em;
+  font-size: 3rem;
+  color: white;
 }
+
 /*LOGO*/
-.logo{
-    margin-top: 0.3em;
-    margin-left: 0.3em;
-    z-index: -1;
-    width: auto;
-    height:5rem;
-}
 .img-logo{
+  margin-top: 0.6em;
+    margin-left: 0.5em;
     width: auto;
-    height:3rem;
-    z-index: -1;
+  height:3rem;
+}
+/*CHAT FRAME*/
+.frame-chat{
+  position: absolute;
+  top: 10rem;
+  left: 15rem;
+  right: 15rem;
+  height: 70vh;
+  background-color: rgb(19, 6, 31);
+  border-radius: 20px;
+  z-index: 12;
 }
