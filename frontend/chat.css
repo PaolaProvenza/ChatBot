@@ -1,4 +1,4 @@
-/* SFONDO */
+/*SFONDO*/
 .chat-background {
   position: absolute;
   inset: 0;
@@ -7,8 +7,7 @@
   object-fit: cover;
   z-index: -2;
 }
-
-.img-sfondo-chat {
+.img-sfondo-chat{
   position: absolute;
   inset: 0;
   width: 100%;
@@ -17,19 +16,17 @@
   z-index: -1;
   filter: brightness(0.5);
 }
-
-/* BARRA */
-.barra {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5rem;
+/*BARRA*/
+.barra{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:5rem;
   background-color: rgb(19, 6, 31);
   z-index: 10;
 }
-
-/* TITOLO */
+/*TITOLO*/
 .titolo {
   font-size: 3rem;
   color: #ffffff;
@@ -39,7 +36,7 @@
   position: relative;
 }
 
-/* LOGO */
+/*LOGO*/
 .logo {
   position: absolute;
   top: 0.5em;
@@ -53,8 +50,8 @@
   width: auto;
 }
 
-/* CHAT FRAME */
-.frame-chat {
+/*CHAT FRAME*/
+.frame-chat{
   position: absolute;
   top: 10rem;
   left: 15rem;
