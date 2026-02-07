@@ -1,53 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>NovAI!</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovAI!</title>
 
-        <!-- Collegamento al file CSS esterno -->
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="chat.css">
-    </head>
-    <body>
-        <div class="chat-background">
-            <img src="immagini/Inizio.png" class="img-sfondo-chat">
-            <video  autoplay muted loop playsinline class="video">
-                <source src="video/video.mp4" type="video/mp4">
-            </video>
+    <!-- Collegamento al file CSS esterno -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+    <div class="chat-background">
+        <img src="immagini/Inizio.png" class="img-sfondo-chat">
+        <video autoplay muted loop playsinline class="video">
+            <source src="video/video.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="barra">
+        <!--POI AGGIUNGIAMO IL LOGOUT DALLA CHAT-->
+        <!--<button id="logoutBtn">Logout</button>-->
+
+        <div class="chat-header">
+            <h1 class="titolo">NovAI!</h1>
         </div>
-        <div class="barra"> 
-            <!--POI AGGIUNGIAMO IL LOGOUT DALLA CHAT-->
-            <!--<button id="logoutBtn">Logout</button>-->
 
-             <div class="chat-header">
-                <h1 class="titolo">NovAI!</h1>
-            </div>
-            <div class="logo" id="logo"> 
-                <img src="immagini/Logo.png" class="img-logo" >
-            </div>
-        </div>    
-        <div class="frame-chat">
+        <div class="logo" id="logo">
+            <img src="immagini/Logo.png" class="img-logo">
+        </div>
+    </div>
 
-        </div>     
-    </body>
+    <div class="frame-chat">
+        <!-- Qui andranno i messaggi della chat -->
+    </div>
+
     <script>
+        const logo = document.getElementById("logo");
+
         logo.onclick = () => {
-          console.log("Logo cliccato — qui torni indietro");
-          window.location.href = "index.html";
-        };              
+            console.log("Logo cliccato — qui torni indietro");
+            window.location.href = "index.html";
+        };
 
-        //COLLEGATO AL BOTTONE DI LOGOUT
-        //const logoutBtn = document.getElementById("logoutBtn");
+        // COLLEGATO AL BOTTONE DI LOGOUT
+        // const logoutBtn = document.getElementById("logoutBtn");
+        // logoutBtn.onclick = () => {
+        //     localStorage.removeItem("loggedUser");
+        //     window.location.href = "index.html";
+        // };
 
-        //logoutBtn.onclick = () => {
-        // rimuove l’utente loggato da localStorage
-            //localStorage.removeItem("loggedUser");
-
-        //torna alla pagina di login
-            //window.location.href = "index.html";
-        //};
-        //per levare il messaggio di successo o errore dopo il login
         window.addEventListener("DOMContentLoaded", () => {
             const data = JSON.parse(localStorage.getItem("transMessage"));
             if (data) {
@@ -60,14 +61,13 @@
 
                 // dopo un breve delay, inizia la risalita
                 setTimeout(() => {
-                messageBox.className = `message-box ${data.type}`; // fade out / risale
+                    messageBox.className = `message-box ${data.type}`; // fade out / risale
                 }, 100); // 100ms serve a far partire la transizione
 
                 // rimuovi dal localStorage così non riappare
                 localStorage.removeItem("transMessage");
             }
         });
-
-        
-  </script>
-</html> 
+    </script>
+</body>
+</html>
