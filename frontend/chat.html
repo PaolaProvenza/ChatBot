@@ -17,6 +17,9 @@
             </video>
         </div>
         <div class="barra"> 
+            <!--POI AGGIUNGIAMO IL LOGOUT DALLA CHAT-->
+            <!--<button id="logoutBtn">Logout</button>-->
+
              <div class="chat-header">
                 <h1 class="titolo">NovAI!</h1>
             </div>
@@ -33,5 +36,38 @@
           console.log("Logo cliccato — qui torni indietro");
           window.location.href = "index.html";
         };              
+
+        //COLLEGATO AL BOTTONE DI LOGOUT
+        //const logoutBtn = document.getElementById("logoutBtn");
+
+        //logoutBtn.onclick = () => {
+        // rimuove l’utente loggato da localStorage
+            //localStorage.removeItem("loggedUser");
+
+        //torna alla pagina di login
+            //window.location.href = "index.html";
+        //};
+        //per levare il messaggio di successo o errore dopo il login
+        window.addEventListener("DOMContentLoaded", () => {
+            const data = JSON.parse(localStorage.getItem("transMessage"));
+            if (data) {
+                // crea il messaggio nel DOM della chat
+                const messageBox = document.createElement("div");
+                messageBox.id = "messageBox";
+                messageBox.className = `message-box ${data.type} show`;
+                messageBox.textContent = data.text;
+                document.body.appendChild(messageBox);
+
+                // dopo un breve delay, inizia la risalita
+                setTimeout(() => {
+                messageBox.className = `message-box ${data.type}`; // fade out / risale
+                }, 100); // 100ms serve a far partire la transizione
+
+                // rimuovi dal localStorage così non riappare
+                localStorage.removeItem("transMessage");
+            }
+        });
+
+        
   </script>
 </html> 
