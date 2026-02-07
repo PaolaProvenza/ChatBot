@@ -18,6 +18,8 @@
     </video>
     
     <div class="right-panel">
+        <!-- Box per i messaggi di successo o errore -->
+        <div id="messageBox" class="message-box"></div>
 
         <!-- Schermata iniziale con titolo e pulsante NEXT -->
         <div class="start-screen" id="startScreen">
@@ -68,13 +70,13 @@
         </div>
         <p id="heading">Sign Up</p>
         <div class="field">
-            <input class="input-field" type="text" placeholder="Username">
+            <input class="input-field" type="text" placeholder="Username" required>
         </div>
         <div class="field">
-            <input class="input-field" type="email" placeholder="Email">
+            <input class="input-field" type="email" placeholder="Email" required>
         </div>
         <div class="field">
-            <input class="input-field" type="password" placeholder="Password">
+            <input class="input-field" type="password" placeholder="Password" required>
         </div>
         <div class="btn">
             <button type="button" class="button2" id="joinBtn">Join Us</button>
@@ -96,6 +98,7 @@
         const showSignUpBtn = document.getElementById("showSignUpBtn");
         const joinBtn = document.getElementById("joinBtn");
 
+        
         // Pulsante NEXT: mostra login
         enterBtn.onclick = () => {
             startScreen.style.display = "none";
@@ -105,9 +108,44 @@
         };
 
         // Login button
-        loginBtn.onclick = () => {
-            console.log("Login cliccato — qui aprirai la chat");
-            window.location.href = "chat.html";
+        // collegato al server
+        loginBtn.onclick = async () => {
+            // prendi i valori dai campi del form
+            const usernameInput = document.querySelector("#loginForm input[type='text']");
+            const passwordInput = document.querySelector("#loginForm input[type='password']");
+
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            // invia i dati al server per il login
+            const res = await fetch("/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+            // aspetta la risposta del server
+            const data = await res.json();
+            // se il login è stato effettuato con successo, vai alla chat
+            if (res.ok) {
+                // svuota campi
+                usernameInput.value = "";
+                passwordInput.value = "";
+
+                // salva messaggio persistente
+                localStorage.setItem("transMessage", JSON.stringify({
+                    text: "Login effettuato con successo!",
+                    type: "success"
+                }));
+
+                // mostra il messaggio nella pagina corrente per iniziare la discesa
+                showMessage("Login effettuato con successo!", "success");
+
+                setTimeout(() => {
+                    window.location.href = "chat.html";
+                }, 1000);
+            } else {
+                showMessage(data.message, "error"); // mostra messaggio di errore
+            }
+
         };
 
         // Mostra form di Sign Up
@@ -117,14 +155,37 @@
         };
 
         // Sign Up button
-        joinBtn.onclick = (e) => {
+        joinBtn.onclick = async (e) => {
             e.preventDefault();
-            window.location.href = "chat.html";
-            start.style.display = "none";
-            login.style.display = "block"; //poi andrà a none
-            console.log("Join-Us cliccato — qui processi la registrazione");
-        };
+            // prendi i valori dai campi del form
+            const inputs = signForm.querySelectorAll("input");
+            // crea un oggetto con i dati dell'utente
+            const user = {
+                username: inputs[0].value,
+                email: inputs[1].value,
+                password: inputs[2].value
+            };
+            // invia i dati al server per la registrazione
+            const res = await fetch("/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(user)
+            });
+            // aspetta la risposta del server
+            const data = await res.json();
+            // se la registrazione è stata effettuata con successo, mostra un messaggio e torna al login
+            if (res.ok) {
+                showMessage("Registrazione effettuata con successo! Effettua il login.", "success");
+                // svuota i campi del form
+                inputs.forEach(input => input.value = "");
 
+                signForm.style.display = "none";
+                loginForm.style.display = "block";
+            } else {
+                showMessage(data.message, "error"); // mostra messaggio di errore
+            }
+        };
+        
         // Freccia indietro login
         document.querySelector(".backBtnLogin").onclick = () => {
             loginBox.style.display = "none";
@@ -137,7 +198,43 @@
             loginForm.style.display = "block";
         };
 
-                
+        // Al caricamento della pagina, svuota tutti i campi del login e signup
+        window.addEventListener("DOMContentLoaded", () => {
+        // login
+            const loginInputs = document.querySelectorAll("#loginForm input");
+            loginInputs.forEach(input => input.value = "");
+
+            // signup
+            const signInputs = document.querySelectorAll("#signForm input");
+            signInputs.forEach(input => input.value = "");
+        });
+        window.addEventListener("pageshow", (event) => {
+            // Pulizia campi login/signup
+            document.querySelectorAll("#loginForm input, #signForm input").forEach(input => input.value = "");
+
+            // Se torni indietro dalla chat, resetta il messaggio senza bloccare click
+            if (event.persisted) {
+                const msg = document.getElementById("messageBox");
+                if (msg) {
+                msg.textContent = "";
+                msg.className = "message-box"; 
+                }
+
+                localStorage.removeItem("transMessage");
+            }
+        });
+
+
+        function showMessage(msg, type = "success") {
+        messageBox.textContent = msg;
+        messageBox.className = `message-box show ${type}`;
+
+        // dopo 6s inizia a risalire
+        setTimeout(() => {
+            messageBox.className = `message-box ${type}`; // fade-out / risale
+        }, 2000);
+        }
+
     </script>
 
 </body>

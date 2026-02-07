@@ -30,6 +30,41 @@ body {
   object-fit: cover;
   z-index: -1;
 }
+/* MESSAGGIO*/
+.message-box {
+  position: fixed;
+  top: -50px;               /* parte fuori dalla pagina */
+  left: 50%;                /* centrato orizzontalmente */
+  transform: translateX(-50%);
+  background-color: #252525;
+  color: #fff;
+  padding: 1em 1.5em;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgb(19, 19, 19);
+  font-size: 1rem;
+  z-index: 9999;            /* assicurati sia sopra tutto */
+  opacity: 0;
+  transition: top 1s ease, opacity 1s ease; /* scivola e fade */
+  pointer-events: none;      /* non interferisce con click */
+}
+
+.message-box.success {
+  background-color: rgb(19, 19, 19);
+  margin-right: 0.66em;
+  /*filter: drop-shadow(5px 5px 2.5px var(rgb(10, 139, 27)));*/
+}
+
+.message-box.error {
+  background-color: rgb(19, 19, 19);
+  margin-right: 0.66em;
+  /*filter: drop-shadow(5px 5px 2.5px var(rgb(137, 9, 9)));*/
+}
+
+.message-box.show {
+  top: 80px; 
+  opacity: 1;
+}
+
 
 /* LAYOUT RIGHT PANEL */
 .right-panel {
@@ -49,12 +84,12 @@ body {
 .start-screen {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* centratura verticale */
-  align-items: center;     /* centratura orizzontale */
+  justify-content: center; 
+  align-items: center;     
   gap: 3px;
   color: white;
-  width: 100%;             /* aggiunto */
-  height: 100%;            /* aggiunto */
+  width: 100%;           
+  height: 100%;            
   animation: fadeIn 1s ease forwards;
 }
 
@@ -87,7 +122,7 @@ body {
 
 /* LOGIN CONTAINER */
 .container {
-  display: none; /* rimane nascosto finché non clicchi NEXT */
+  display: none; 
   position: relative;
   padding: 4px;
   border-radius: 30px;
@@ -190,17 +225,17 @@ body {
 }
 /* Contenitore dei pulsanti Login e Sign Up */
 .btn {
-  display: flex;              /* li mette in riga */
-  gap: 10px;                  /* spazio tra i due pulsanti */
-  width: 100%;                /* occupano tutta la larghezza del form */
+  display: flex;              
+  gap: 10px;                  
+  width: 100%;               
   margin-top: 10px;
 }
 
 /* Pulsanti perfettamente uguali */
 .button1,
 .button2 {
-  flex: 1;                    /* stessa larghezza */
-  text-align: center;         /* centra il testo */
+  flex: 1;                    
+  text-align: center;        
 }
 .button span {
   margin-right: 0.3em;
