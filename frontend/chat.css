@@ -39,17 +39,24 @@
 /*LOGO*/
 .logo {
   position: absolute;
-  top: 0.5em;
-  left: 0.5em;
+  top: 1em;
+  left: 3em;
   height: 5rem;
   z-index: 12;
 }
 
 .img-logo {
-  height: 4rem;
+  height: 3rem;
   width: auto;
 }
-
+.utente {
+  position: absolute;
+  top: 0em;
+  left: 3.5em;
+  height: 5rem;
+  color: #ffffff;
+  z-index: 12;
+}
 /*CHAT FRAME*/
 .frame-chat{
   position: absolute;

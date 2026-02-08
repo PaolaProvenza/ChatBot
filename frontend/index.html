@@ -63,7 +63,7 @@
                     <button type="button" class="button2" id="showSignUpBtn">Sign Up</button>
                 </div>
 
-                <button class="button3">Forgot Password</button>
+                <button class="button3" id="forgotPassword">Forgot Password</button>
             </form>
 
             <form class="form2" id="signForm" style="display:none;">
@@ -91,6 +91,34 @@
                     <button type="button" class="button2" id="joinBtn">Join Us</button>
                 </div>
             </form>
+
+            <form class="form2" id="resetForm" style="display:none;">
+                <div class="back-arrow backBtnReset">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </div>
+            
+                <p id="heading">Change Password</p>
+            
+                <div class="field">
+                    <input class="input-field" type="text" placeholder="Username" required>
+                </div>
+            
+                <div class="field">
+                    <input class="input-field" type="email" placeholder="Email" required>
+                </div>
+            
+                <div class="field">
+                    <input class="input-field" type="password" placeholder="New Password" required>
+                </div>
+            
+                <div class="btn">
+                    <button type="button" class="button2" id="changePasswordBtn">Change</button>
+                </div>
+            </form>
+            
+
         </div>
     </div>
 
@@ -105,14 +133,19 @@
         const showSignUpBtn = document.getElementById("showSignUpBtn");
         const joinBtn = document.getElementById("joinBtn");
         const messageBox = document.getElementById("messageBox");
+
+        const forgotBtn = document.querySelector(".button3");
+        const resetForm = document.getElementById("resetForm");
+        const changePasswordBtn = document.getElementById("changePasswordBtn");
+
         enterBtn.onclick = () => {
             startScreen.style.display = "none";
             loginBox.style.display = "block";
             loginForm.style.display = "block";
             signForm.style.display = "none";
         };
-        // Login button
 
+        // Login button
         // collegato al server
             loginBtn.onclick = async () => {
                 const usernameInput = document.querySelector("#loginForm input[type='text']");
@@ -130,6 +163,7 @@
                 const data = await res.json();
 
                 if (res.ok) {
+                    localStorage.setItem("loggedUser", data.username);
                     usernameInput.value = "";
                     passwordInput.value = "";
 
@@ -152,7 +186,9 @@
                 loginForm.style.display = "none";
                 signForm.style.display = "block";
             };
-        //JOIN BUTTON
+
+
+        //JOIN BUTTON          
         joinBtn.onclick = async (e) => {
             e.preventDefault();
 
@@ -181,6 +217,47 @@
                 loginForm.style.display = "block";
             } else {
                 showMessage(data.message || "Errore registrazione", "error");
+            }
+        };
+        //FORGOT PASSWORD
+        forgotBtn.onclick = (e) => {
+            e.preventDefault();
+            loginForm.style.display = "none";
+            signForm.style.display = "none";
+            resetForm.style.display = "block";
+        };
+
+        // torna al login con freccia
+        document.querySelector(".backBtnReset").onclick = () => {
+            resetForm.style.display = "none";
+            loginForm.style.display = "block";
+        };
+
+        // CHANGE PASSWORD
+        changePasswordBtn.onclick = async () => {
+            const inputs = resetForm.querySelectorAll("input");
+
+            const data = {
+                username: inputs[0].value,
+                email: inputs[1].value,
+                newPassword: inputs[2].value
+            };
+
+            const res = await fetch("/change-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+
+            if (res.ok) {
+                showMessage("Password aggiornata! Effettua il login.", "success");
+                inputs.forEach(i => i.value = "");
+                resetForm.style.display = "none";
+                loginForm.style.display = "block";
+            } else {
+                showMessage(result.message, "error");
             }
         };
 

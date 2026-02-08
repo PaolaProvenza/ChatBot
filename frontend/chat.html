@@ -28,6 +28,7 @@
 
         <div class="logo" id="logo">
             <img src="immagini/Logo.png" class="img-logo">
+            <p class="utente"> </p>
         </div>
     </div>
 
@@ -53,6 +54,14 @@
     //};
 
     window.addEventListener("DOMContentLoaded", () => {
+
+        const username = localStorage.getItem("loggedUser");
+        const userEl = document.querySelector(".utente");
+
+        if (username && userEl) {
+            userEl.textContent = username;
+        }
+
         const data = JSON.parse(localStorage.getItem("transMessage"));
         if (data) {
             // crea il messaggio nel DOM della chat
