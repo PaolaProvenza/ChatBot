@@ -13,18 +13,18 @@
 
     <!-- Immagine di sfondo iniziale -->
     <img src="immagini/Inizio.png" class="img-sfondo-iniziale">
-    <video  autoplay muted loop playsinline class="video">
+    <video autoplay muted loop playsinline class="video">
         <source src="video/video.mp4" type="video/mp4">
     </video>
-    
+
     <div class="right-panel">
         <!-- Box per i messaggi di successo o errore -->
         <div id="messageBox" class="message-box"></div>
 
         <!-- Schermata iniziale con titolo e pulsante NEXT -->
         <div class="start-screen" id="startScreen">
-            <h1 >NovAI!</h1>
-            <p>Accedi e chatta con me. </p>
+            <h1>NovAI!</h1>
+            <p>Accedi e chatta con me.</p>
 
             <!-- Pulsante che attiva il passaggio alla schermata di login -->
             <button class="button" id="enterBtn">
@@ -32,61 +32,68 @@
 
                 <!-- Icona SVG composta da tre frecce -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 43">
-                  <polygon points="39.58,4.46 44.11,0 66,21.5 44.11,43 39.58,38.54 56.94,21.5"></polygon>
-                  <polygon points="19.79,4.46 24.32,0 46.21,21.5 24.32,43 19.79,38.54 37.15,21.5"></polygon>
-                  <polygon points="0,4.46 4.53,0 26.42,21.5 4.53,43 0,38.54 17.36,21.5"></polygon>
+                    <polygon points="39.58,4.46 44.11,0 66,21.5 44.11,43 39.58,38.54 56.94,21.5"></polygon>
+                    <polygon points="19.79,4.46 24.32,0 46.21,21.5 24.32,43 19.79,38.54 37.15,21.5"></polygon>
+                    <polygon points="0,4.46 4.53,0 26.42,21.5 4.53,43 0,38.54 17.36,21.5"></polygon>
                 </svg>
             </button>
         </div>
 
         <!-- Box del login, inizialmente nascosto -->
-        <!-- Nel container del login -->
-<div class="container" id="loginBox">
-    <form class="form" id="loginForm">
-        <div class="back-arrow backBtnLogin">
-            <svg viewBox="0 0 24 24">
-                <path d="M15 18l-6-6 6-6" />
-            </svg>
-        </div>
-        <p id="heading">Login</p>
-        <div class="field">
-            <input class="input-field" type="text" placeholder="Username">
-        </div>
-        <div class="field">
-            <input class="input-field" type="password" placeholder="Password">
-        </div>
-        <div class="btn">
-            <button type="button" class="button1" id="loginBtn">Login</button>
-            <button type="button" class="button2" id="showSignUpBtn">Sign Up</button>
-        </div>
-        <button class="button3">Forgot Password</button>
-    </form>
+        <div class="container" id="loginBox">
+            <form class="form" id="loginForm">
+                <div class="back-arrow backBtnLogin">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </div>
 
-    <form class="form2" id="signForm" style="display:none;">
-        <div class="back-arrow backBtnSign">
-            <svg viewBox="0 0 24 24">
-                <path d="M15 18l-6-6 6-6" />
-            </svg>
-        </div>
-        <p id="heading">Sign Up</p>
-        <div class="field">
-            <input class="input-field" type="text" placeholder="Username" required>
-        </div>
-        <div class="field">
-            <input class="input-field" type="email" placeholder="Email" required>
-        </div>
-        <div class="field">
-            <input class="input-field" type="password" placeholder="Password" required>
-        </div>
-        <div class="btn">
-            <button type="button" class="button2" id="joinBtn">Join Us</button>
-        </div>
-    </form>
-</div>
+                <p id="heading">Login</p>
 
+                <div class="field">
+                    <input class="input-field" type="text" placeholder="Username">
+                </div>
 
+                <div class="field">
+                    <input class="input-field" type="password" placeholder="Password">
+                </div>
+
+                <div class="btn">
+                    <button type="button" class="button1" id="loginBtn">Login</button>
+                    <button type="button" class="button2" id="showSignUpBtn">Sign Up</button>
+                </div>
+
+                <button class="button3">Forgot Password</button>
+            </form>
+
+            <form class="form2" id="signForm" style="display:none;">
+                <div class="back-arrow backBtnSign">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </div>
+
+                <p id="heading">Sign Up</p>
+
+                <div class="field">
+                    <input class="input-field" type="text" placeholder="Username" required>
+                </div>
+
+                <div class="field">
+                    <input class="input-field" type="email" placeholder="Email" required>
+                </div>
+
+                <div class="field">
+                    <input class="input-field" type="password" placeholder="Password" required>
+                </div>
+
+                <div class="btn">
+                    <button type="button" class="button2" id="joinBtn">Join Us</button>
+                </div>
+            </form>
+        </div>
     </div>
-    
+
     <script>
         const enterBtn = document.getElementById("enterBtn");
         const startScreen = document.getElementById("startScreen");
@@ -97,145 +104,122 @@
         const loginBtn = document.getElementById("loginBtn");
         const showSignUpBtn = document.getElementById("showSignUpBtn");
         const joinBtn = document.getElementById("joinBtn");
-
-        
-        // Pulsante NEXT: mostra login
+        const messageBox = document.getElementById("messageBox");
         enterBtn.onclick = () => {
             startScreen.style.display = "none";
             loginBox.style.display = "block";
             loginForm.style.display = "block";
             signForm.style.display = "none";
         };
-
         // Login button
+
         // collegato al server
-        loginBtn.onclick = async () => {
-            // prendi i valori dai campi del form
-            const usernameInput = document.querySelector("#loginForm input[type='text']");
-            const passwordInput = document.querySelector("#loginForm input[type='password']");
+            loginBtn.onclick = async () => {
+                const usernameInput = document.querySelector("#loginForm input[type='text']");
+                const passwordInput = document.querySelector("#loginForm input[type='password']");
 
-            const username = usernameInput.value;
-            const password = passwordInput.value;
-            // invia i dati al server per il login
-            const res = await fetch("/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            });
-            // aspetta la risposta del server
-            const data = await res.json();
-            // se il login è stato effettuato con successo, vai alla chat
-            if (res.ok) {
-                // svuota campi
-                usernameInput.value = "";
-                passwordInput.value = "";
+                const username = usernameInput.value;
+                const password = passwordInput.value;
 
-                // salva messaggio persistente
-                localStorage.setItem("transMessage", JSON.stringify({
-                    text: "Login effettuato con successo!",
-                    type: "success"
-                }));
+                const res = await fetch("/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
 
-                // mostra il messaggio nella pagina corrente per iniziare la discesa
-                showMessage("Login effettuato con successo!", "success");
+                const data = await res.json();
 
-                setTimeout(() => {
-                    window.location.href = "chat.html";
-                }, 1000);
-            } else {
-                showMessage(data.message, "error"); // mostra messaggio di errore
-            }
+                if (res.ok) {
+                    usernameInput.value = "";
+                    passwordInput.value = "";
 
-        };
+                    localStorage.setItem("transMessage", JSON.stringify({
+                        text: "Login effettuato con successo!",
+                        type: "success"
+                    }));
 
-        // Mostra form di Sign Up
-        showSignUpBtn.onclick = () => {
-            loginForm.style.display = "none";
-            signForm.style.display = "block";
-        };
+                    showMessage("Login effettuato con successo!", "success");
 
-        // Sign Up button
+                    setTimeout(() => {
+                        window.location.href = "chat.html";
+                    }, 1000);
+                } else {
+                    showMessage(data.message || "Credenziali errate", "error");
+                }
+            };
+
+            showSignUpBtn.onclick = () => {
+                loginForm.style.display = "none";
+                signForm.style.display = "block";
+            };
+        //JOIN BUTTON
         joinBtn.onclick = async (e) => {
             e.preventDefault();
-            // prendi i valori dai campi del form
+
             const inputs = signForm.querySelectorAll("input");
-            // crea un oggetto con i dati dell'utente
+
             const user = {
                 username: inputs[0].value,
                 email: inputs[1].value,
                 password: inputs[2].value
             };
-            // invia i dati al server per la registrazione
+
             const res = await fetch("/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(user)
             });
-            // aspetta la risposta del server
+
             const data = await res.json();
-            // se la registrazione è stata effettuata con successo, mostra un messaggio e torna al login
+
             if (res.ok) {
                 showMessage("Registrazione effettuata con successo! Effettua il login.", "success");
-                // svuota i campi del form
+
                 inputs.forEach(input => input.value = "");
 
                 signForm.style.display = "none";
                 loginForm.style.display = "block";
             } else {
-                showMessage(data.message, "error"); // mostra messaggio di errore
+                showMessage(data.message || "Errore registrazione", "error");
             }
         };
-        
-        // Freccia indietro login
+
         document.querySelector(".backBtnLogin").onclick = () => {
             loginBox.style.display = "none";
             startScreen.style.display = "flex";
         };
 
-        // Freccia indietro sign up
         document.querySelector(".backBtnSign").onclick = () => {
             signForm.style.display = "none";
             loginForm.style.display = "block";
         };
 
-        // Al caricamento della pagina, svuota tutti i campi del login e signup
         window.addEventListener("DOMContentLoaded", () => {
-        // login
-            const loginInputs = document.querySelectorAll("#loginForm input");
-            loginInputs.forEach(input => input.value = "");
-
-            // signup
-            const signInputs = document.querySelectorAll("#signForm input");
-            signInputs.forEach(input => input.value = "");
+            document.querySelectorAll("#loginForm input, #signForm input").forEach(input => input.value = "");
         });
+
         window.addEventListener("pageshow", (event) => {
-            // Pulizia campi login/signup
             document.querySelectorAll("#loginForm input, #signForm input").forEach(input => input.value = "");
 
-            // Se torni indietro dalla chat, resetta il messaggio senza bloccare click
             if (event.persisted) {
                 const msg = document.getElementById("messageBox");
                 if (msg) {
-                msg.textContent = "";
-                msg.className = "message-box"; 
+                    msg.textContent = "";
+                    msg.className = "message-box";
                 }
 
                 localStorage.removeItem("transMessage");
             }
         });
 
-
         function showMessage(msg, type = "success") {
-        messageBox.textContent = msg;
-        messageBox.className = `message-box show ${type}`;
+            messageBox.textContent = msg;
+            messageBox.className = `message-box show ${type}`;
 
-        // dopo 6s inizia a risalire
-        setTimeout(() => {
-            messageBox.className = `message-box ${type}`; // fade-out / risale
-        }, 2000);
+            setTimeout(() => {
+                messageBox.className = `message-box ${type}`;
+            }, 2000);
         }
-
     </script>
-
 </body>
 </html>
