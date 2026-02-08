@@ -104,55 +104,58 @@
         const loginBtn = document.getElementById("loginBtn");
         const showSignUpBtn = document.getElementById("showSignUpBtn");
         const joinBtn = document.getElementById("joinBtn");
-
+        const messageBox = document.getElementById("messageBox");
         enterBtn.onclick = () => {
             startScreen.style.display = "none";
             loginBox.style.display = "block";
             loginForm.style.display = "block";
             signForm.style.display = "none";
         };
+        // Login button
 
-        loginBtn.onclick = async () => {
-            const usernameInput = document.querySelector("#loginForm input[type='text']");
-            const passwordInput = document.querySelector("#loginForm input[type='password']");
+        // collegato al server
+            loginBtn.onclick = async () => {
+                const usernameInput = document.querySelector("#loginForm input[type='text']");
+                const passwordInput = document.querySelector("#loginForm input[type='password']");
 
-            const username = usernameInput.value;
-            const password = passwordInput.value;
+                const username = usernameInput.value;
+                const password = passwordInput.value;
 
-            const res = await fetch("/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            });
+                const res = await fetch("/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
 
-            const data = await res.json();
+                const data = await res.json();
 
-            if (res.ok) {
-                usernameInput.value = "";
-                passwordInput.value = "";
+                if (res.ok) {
+                    usernameInput.value = "";
+                    passwordInput.value = "";
 
-                localStorage.setItem("transMessage", JSON.stringify({
-                    text: "Login effettuato con successo!",
-                    type: "success"
-                }));
+                    localStorage.setItem("transMessage", JSON.stringify({
+                        text: "Login effettuato con successo!",
+                        type: "success"
+                    }));
 
-                showMessage("Login effettuato con successo!", "success");
+                    showMessage("Login effettuato con successo!", "success");
 
-                setTimeout(() => {
-                    window.location.href = "chat.html";
-                }, 1000);
-            } else {
-                showMessage(data.message, "error");
-            }
-        };
+                    setTimeout(() => {
+                        window.location.href = "chat.html";
+                    }, 1000);
+                } else {
+                    showMessage(data.message || "Credenziali errate", "error");
+                }
+            };
 
-        showSignUpBtn.onclick = () => {
-            loginForm.style.display = "none";
-            signForm.style.display = "block";
-        };
-
+            showSignUpBtn.onclick = () => {
+                loginForm.style.display = "none";
+                signForm.style.display = "block";
+            };
+        //JOIN BUTTON
         joinBtn.onclick = async (e) => {
             e.preventDefault();
+
             const inputs = signForm.querySelectorAll("input");
 
             const user = {
@@ -171,12 +174,13 @@
 
             if (res.ok) {
                 showMessage("Registrazione effettuata con successo! Effettua il login.", "success");
+
                 inputs.forEach(input => input.value = "");
 
                 signForm.style.display = "none";
                 loginForm.style.display = "block";
             } else {
-                showMessage(data.message, "error");
+                showMessage(data.message || "Errore registrazione", "error");
             }
         };
 
