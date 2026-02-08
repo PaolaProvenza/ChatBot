@@ -62,7 +62,10 @@ app.post("/login", async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: "Credenziali errate" });
 
-    res.json({ message: "Login OK" });
+    res.json({ 
+        message: "Login OK",
+        username: user.username
+    });
   } catch (e) {
     console.error("Errore login:", e);
     res.status(500).json({ message: "Errore server" });
@@ -86,6 +89,39 @@ app.post("/chat", (req, res) => {
   }
 });
 
+// ===== CHANGE PASSWORD =====
+app.post("/change-password", async (req, res) => {
+    const { username, email, newPassword } = req.body;
+  
+    if (!username || !email || !newPassword) {
+      return res.status(400).json({ message: "Tutti i campi sono obbligatori" });
+    }
+  
+    const users = readUsers();
+    const user = users.find(
+      u => u.username === username && u.email === email
+    );
+  
+    if (!user) {
+      return res.status(401).json({ message: "Utente non trovato" });
+    }
+    
+    // controlla se la nuova password è uguale alla vecchia
+    const samePassword = await bcrypt.compare(newPassword, user.password);
+
+    if (samePassword) {
+    return res
+        .status(400)
+        .json({ message: "La nuova password non può essere uguale alla precedente" });
+    }
+
+    // se è diversa, aggiorna
+    user.password = await bcrypt.hash(newPassword, 10);
+    saveUsers(users);
+
+    res.json({ message: "Password aggiornata con successo" });
+  });
+  
 // Avvio server
 app.listen(PORT, () => {
   console.log(`Server attivo su http://localhost:${PORT}`);
