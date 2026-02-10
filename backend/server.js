@@ -123,6 +123,7 @@ app.post("/change-password", async (req, res) => {
   });
   
 // Avvio server
-app.listen(PORT, () => {
-  console.log(`Server attivo su http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server attivo su http://0.0.0.0:${PORT}`);
 });
+
