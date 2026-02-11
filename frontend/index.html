@@ -51,11 +51,11 @@
                 <p id="heading">Login</p>
 
                 <div class="field">
-                    <input class="input-field" type="text" placeholder="Username">
+                    <input class="input-field" type="text" placeholder="Username"maxlength="15">
                 </div>
 
                 <div class="field">
-                    <input class="input-field" type="password" placeholder="Password">
+                    <input class="input-field" type="password" placeholder="Password"maxlength="15">
                 </div>
 
                 <div class="btn">
@@ -76,15 +76,15 @@
                 <p id="heading">Sign Up</p>
 
                 <div class="field">
-                    <input class="input-field" type="text" placeholder="Username" required>
+                    <input class="input-field" type="text" placeholder="Username" required maxlength="15">
                 </div>
 
                 <div class="field">
-                    <input class="input-field" type="email" placeholder="Email" required>
+                    <input class="input-field" type="email" placeholder="Email" required maxlength="15">
                 </div>
 
                 <div class="field">
-                    <input class="input-field" type="password" placeholder="Password" required>
+                    <input class="input-field" type="password" placeholder="Password" required maxlength="15">
                 </div>
 
                 <div class="btn">
@@ -102,15 +102,15 @@
                 <p id="heading">Change Password</p>
             
                 <div class="field">
-                    <input class="input-field" type="text" placeholder="Username" required>
+                    <input class="input-field" type="text" placeholder="Username" required maxlength="15">
                 </div>
             
                 <div class="field">
-                    <input class="input-field" type="email" placeholder="Email" required>
+                    <input class="input-field" type="email" placeholder="Email" required maxlength="15">
                 </div>
             
                 <div class="field">
-                    <input class="input-field" type="password" placeholder="New Password" required>
+                    <input class="input-field" type="password" placeholder="New Password" required maxlength="15">
                 </div>
             
                 <div class="btn">
@@ -137,6 +137,16 @@
         const forgotBtn = document.querySelector(".button3");
         const resetForm = document.getElementById("resetForm");
         const changePasswordBtn = document.getElementById("changePasswordBtn");
+        const inputs = document.querySelectorAll(".input-field");
+
+        document.querySelectorAll(".input-field").forEach(input => {
+        input.addEventListener("keydown", (e) => {
+        if (e.key === " ") {
+            e.preventDefault(); // impedisce l’inserimento dello spazio
+        }
+        });
+        });
+
 
         enterBtn.onclick = () => {
             startScreen.style.display = "none";
