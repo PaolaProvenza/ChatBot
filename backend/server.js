@@ -26,6 +26,8 @@ if (!fs.existsSync(USERS_FILE)) {
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 
@@ -39,18 +41,19 @@ function saveUsers(users) {
 }
 
 // ROUTE: SIGNUP
+  
 app.post("/signup", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    if (!username || !email || !password)
+    const { nickname, username, password } = req.body;
+    if (!nickname || !username || !password)
       return res.status(400).json({ message: "Tutti i campi sono obbligatori" });
 
     const users = readUsers();
-    const exists = users.find(u => u.username === username || u.email === email);
-    if (exists) return res.status(401).json({ message: "Utente già esistente" });
+    const exists = users.find(u => u.username === username);
+    if (exists) return res.status(401).json({ message: "Username già esistente" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    users.push({ username, email, password: hashedPassword });
+    users.push({ nickname, username, password: hashedPassword });
     saveUsers(users);
 
     res.json({ message: "Registrazione completata" });
@@ -59,6 +62,8 @@ app.post("/signup", async (req, res) => {
     res.status(500).json({ message: "Errore server" });
   }
 });
+
+  
 
 //LOGIN
 app.post("/login", async (req, res) => {
@@ -79,14 +84,14 @@ app.post("/login", async (req, res) => {
     if (!match)
       return res.status(401).json({ message: "Credenziali errate" });
 
-    //SALVA SESSIONE
-    req.session.user = {
-      username: user.username
-    };
+    // SALVA SESSIONE
+    req.session.user = { username: user.username, nickname: user.nickname };
 
+    // RITORNA username e nickname
     res.json({
       message: "Login OK",
-      username: user.username
+      username: user.username,
+      nickname: user.nickname  // <-- importante
     });
 
   } catch (e) {
@@ -115,36 +120,34 @@ app.post("/chat", (req, res) => {
 
 // ===== CHANGE PASSWORD =====
 app.post("/change-password", async (req, res) => {
-    const { username, email, newPassword } = req.body;
-  
-    if (!username || !email || !newPassword) {
-      return res.status(400).json({ message: "Tutti i campi sono obbligatori" });
-    }
-  
-    const users = readUsers();
-    const user = users.find(
-      u => u.username === username && u.email === email
-    );
-  
-    if (!user) {
-      return res.status(401).json({ message: "Utente non trovato" });
-    }
-    
-    // controlla se la nuova password è uguale alla vecchia
-    const samePassword = await bcrypt.compare(newPassword, user.password);
+  const { username, nickname, newPassword } = req.body;
 
-    if (samePassword) {
-    return res
-        .status(400)
-        .json({ message: "La nuova password non può essere uguale alla precedente" });
-    }
+  if (!username || !nickname || !newPassword) {
+    return res.status(400).json({ message: "Tutti i campi sono obbligatori" });
+  }
 
-    // se è diversa, aggiorna
-    user.password = await bcrypt.hash(newPassword, 10);
-    saveUsers(users);
+  const users = readUsers();
+  const user = users.find(
+    u => u.username === username && u.nickname === nickname
+  );
 
-    res.json({ message: "Password aggiornata con successo" });
-  });
+  if (!user) {
+    return res.status(401).json({ message: "Utente non trovato" });
+  }
+
+  // controlla se la nuova password è uguale alla vecchia
+  const samePassword = await bcrypt.compare(newPassword, user.password);
+  if (samePassword) {
+    return res.status(400).json({ message: "La nuova password non può essere uguale alla precedente" });
+  }
+
+  // aggiorna la password
+  user.password = await bcrypt.hash(newPassword, 10);
+  saveUsers(users);
+
+  res.json({ message: "Password aggiornata con successo" });
+});
+
 
 app.get("/chat.html", (req, res) => {
   if (!req.session.user) {

@@ -61,29 +61,29 @@
     //};
 
     window.addEventListener("DOMContentLoaded", () => {
+    const nickname = localStorage.getItem("loggedUser");
+    const userEl = document.querySelector(".utente");
 
-        const username = localStorage.getItem("loggedUser");
-        const userEl = document.querySelector(".utente");
+    if (nickname && userEl) {
+        userEl.textContent = nickname;  // <-- mostra il nickname corretto
+    } else {
+        userEl.textContent = "Utente"; // fallback
+    }
 
-        if (username && userEl) {
-            userEl.textContent = username;
-        }
+    const data = JSON.parse(localStorage.getItem("transMessage"));
+    if (data) {
+        const messageBox = document.createElement("div");
+        messageBox.id = "messageBox";
+        messageBox.className = `message-box ${data.type} show`;
+        messageBox.textContent = data.text;
+        document.body.appendChild(messageBox);
 
-        const data = JSON.parse(localStorage.getItem("transMessage"));
-        if (data) {
-            // crea il messaggio nel DOM della chat
-            const messageBox = document.createElement("div");
-            messageBox.id = "messageBox";
-            messageBox.className = `message-box ${data.type} show`;
-            messageBox.textContent = data.text;
-            document.body.appendChild(messageBox);
+        setTimeout(() => {
+            messageBox.className = `message-box ${data.type}`;
+        }, 2000);
+        localStorage.removeItem("transMessage");
+    }
+});
 
-            // dopo un breve delay, inizia la risalita
-            setTimeout(() => {
-                messageBox.className = `message-box ${data.type}`; // fade-out / risale
-            }, 2000);
-            localStorage.removeItem("transMessage");
-        }
-    });
 </script>
 </html>

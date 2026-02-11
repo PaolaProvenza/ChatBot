@@ -4,33 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovAI!</title>
-
-    <!-- Collegamento al file CSS esterno -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="chat.css">
 </head>
 <body>
 
-    <!-- Immagine di sfondo iniziale -->
+    <!-- Sfondo video e immagine -->
     <img src="immagini/Inizio.png" class="img-sfondo-iniziale">
     <video autoplay muted loop playsinline class="video">
         <source src="video/video.mp4" type="video/mp4">
     </video>
 
     <div class="right-panel">
-        <!-- Box per i messaggi di successo o errore -->
         <div id="messageBox" class="message-box"></div>
 
-        <!-- Schermata iniziale con titolo e pulsante NEXT -->
+        <!-- Start Screen -->
         <div class="start-screen" id="startScreen">
             <h1>NovAI!</h1>
             <p>Accedi e chatta con me.</p>
-
-            <!-- Pulsante che attiva il passaggio alla schermata di login -->
             <button class="button" id="enterBtn">
                 <span>NEXT</span>
-
-                <!-- Icona SVG composta da tre frecce -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 43">
                     <polygon points="39.58,4.46 44.11,0 66,21.5 44.11,43 39.58,38.54 56.94,21.5"></polygon>
                     <polygon points="19.79,4.46 24.32,0 46.21,21.5 24.32,43 19.79,38.54 37.15,21.5"></polygon>
@@ -39,23 +32,23 @@
             </button>
         </div>
 
-        <!-- Box del login, inizialmente nascosto -->
+        <!-- Login / Sign Up / Reset Container -->
         <div class="container" id="loginBox">
+
+            <!-- LOGIN FORM -->
             <form class="form" id="loginForm">
                 <div class="back-arrow backBtnLogin">
                     <svg viewBox="0 0 24 24">
                         <path d="M15 18l-6-6 6-6" />
                     </svg>
                 </div>
-
-                <p id="heading">Login</p>
+                <p id="heading">Login</p>                
 
                 <div class="field">
-                    <input class="input-field" type="text" placeholder="Username"maxlength="15">
+                    <input id="loginUsername" class="input-field" type="text" placeholder="Username" required maxlength="30">
                 </div>
-
                 <div class="field">
-                    <input class="input-field" type="password" placeholder="Password"maxlength="15">
+                    <input id="loginPassword" class="input-field" type="password" placeholder="Password" required maxlength="15">
                 </div>
 
                 <div class="btn">
@@ -66,51 +59,52 @@
                 <button class="button3" id="forgotPassword">Forgot Password</button>
             </form>
 
+            <!-- SIGN UP FORM -->
             <form class="form2" id="signForm" style="display:none;">
                 <div class="back-arrow backBtnSign">
                     <svg viewBox="0 0 24 24">
                         <path d="M15 18l-6-6 6-6" />
                     </svg>
                 </div>
-
                 <p id="heading">Sign Up</p>
-
+            
                 <div class="field">
-                    <input class="input-field" type="text" placeholder="Username" required maxlength="15">
+                    <input id="signNickname" class="input-field" type="text" placeholder="Nickname" maxlength="30" required>
                 </div>
-
+            
                 <div class="field">
-                    <input class="input-field" type="email" placeholder="Email" required maxlength="15">
+                    <input id="signUsername" class="input-field" type="text" placeholder="Username (unico)" maxlength="30" required>
                 </div>
-
+            
                 <div class="field">
-                    <input class="input-field" type="password" placeholder="Password" required maxlength="15">
+                    <input id="signPassword" class="input-field" type="password" placeholder="Password" maxlength="15" required>
                 </div>
-
+            
                 <div class="btn">
-                    <button type="button" class="button2" id="joinBtn">Join Us</button>
+                    <button type="submit" class="button2" id="joinBtn">Join Us</button>
                 </div>
             </form>
+            
 
+            <!-- RESET PASSWORD FORM -->
             <form class="form2" id="resetForm" style="display:none;">
                 <div class="back-arrow backBtnReset">
                     <svg viewBox="0 0 24 24">
                         <path d="M15 18l-6-6 6-6" />
                     </svg>
                 </div>
-            
                 <p id="heading">Change Password</p>
             
                 <div class="field">
-                    <input class="input-field" type="text" placeholder="Username" required maxlength="15">
+                    <input id="resetNickname" class="input-field" type="text" placeholder="Nickname" required maxlength="30">
                 </div>
             
                 <div class="field">
-                    <input class="input-field" type="email" placeholder="Email" required maxlength="15">
+                    <input id="resetUsername" class="input-field" type="text" placeholder="Username" required maxlength="30">
                 </div>
             
                 <div class="field">
-                    <input class="input-field" type="password" placeholder="New Password" required maxlength="15">
+                    <input id="resetPassword" class="input-field" type="password" placeholder="New Password" required maxlength="15">
                 </div>
             
                 <div class="btn">
@@ -122,191 +116,170 @@
         </div>
     </div>
 
-    <script>
-        const enterBtn = document.getElementById("enterBtn");
-        const startScreen = document.getElementById("startScreen");
-        const loginBox = document.getElementById("loginBox");
-        const loginForm = document.getElementById("loginForm");
-        const signForm = document.getElementById("signForm");
+<script>
+const enterBtn = document.getElementById("enterBtn");
+const startScreen = document.getElementById("startScreen");
+const loginBox = document.getElementById("loginBox");
+const loginForm = document.getElementById("loginForm");
+const signForm = document.getElementById("signForm");
+const resetForm = document.getElementById("resetForm");
 
-        const loginBtn = document.getElementById("loginBtn");
-        const showSignUpBtn = document.getElementById("showSignUpBtn");
-        const joinBtn = document.getElementById("joinBtn");
-        const messageBox = document.getElementById("messageBox");
+const loginBtn = document.getElementById("loginBtn");
+const showSignUpBtn = document.getElementById("showSignUpBtn");
+const joinBtn = document.getElementById("joinBtn");
+const changePasswordBtn = document.getElementById("changePasswordBtn");
+const forgotBtn = document.getElementById("forgotPassword");
+const messageBox = document.getElementById("messageBox");
 
-        const forgotBtn = document.querySelector(".button3");
-        const resetForm = document.getElementById("resetForm");
-        const changePasswordBtn = document.getElementById("changePasswordBtn");
-        const inputs = document.querySelectorAll(".input-field");
+// NEXT button
+enterBtn.onclick = () => {
+    startScreen.style.display = "none";
+    loginBox.style.display = "block";
+    loginForm.style.display = "block";
+    signForm.style.display = "none";
+};
 
-        document.querySelectorAll(".input-field").forEach(input => {
-        input.addEventListener("keydown", (e) => {
-        if (e.key === " ") {
-            e.preventDefault(); // impedisce l’inserimento dello spazio
-        }
-        });
-        });
+// LOGIN
+loginBtn.onclick = async () => {
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
 
+  if (!username || !password) {
+    showMessage("Compila tutti i campi", "error");
+    return;
+  }
 
-        enterBtn.onclick = () => {
-            startScreen.style.display = "none";
-            loginBox.style.display = "block";
-            loginForm.style.display = "block";
-            signForm.style.display = "none";
-        };
+  const res = await fetch("/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  });
 
-        // Login button
-        // collegato al server
-            loginBtn.onclick = async () => {
-                const usernameInput = document.querySelector("#loginForm input[type='text']");
-                const passwordInput = document.querySelector("#loginForm input[type='password']");
+  const data = await res.json();
 
-                const username = usernameInput.value;
-                const password = passwordInput.value;
+  if (res.ok) {
+    // Salva il nickname ricevuto dal server
+    localStorage.setItem("loggedUser", data.nickname);  
 
-                const res = await fetch("/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password })
-                });
+    document.getElementById("loginUsername").value = "";
+    document.getElementById("loginPassword").value = "";
 
-                const data = await res.json();
+    showMessage("Login effettuato con successo!", "success");
 
-                if (res.ok) {
-                    localStorage.setItem("loggedUser", data.username);
-                    usernameInput.value = "";
-                    passwordInput.value = "";
-
-                    localStorage.setItem("transMessage", JSON.stringify({
-                        text: "Login effettuato con successo!",
-                        type: "success"
-                    }));
-
-                    showMessage("Login effettuato con successo!", "success");
-
-                    setTimeout(() => {
-                        window.location.href = "chat.html";
-                    }, 1000);
-                } else {
-                    showMessage(data.message || "Credenziali errate", "error");
-                }
-            };
-
-            showSignUpBtn.onclick = () => {
-                loginForm.style.display = "none";
-                signForm.style.display = "block";
-            };
+    setTimeout(() => {
+      window.location.href = "chat.html";
+    }, 1000);
+  } else {
+    showMessage(data.message || "Credenziali errate", "error");
+  }
+};
 
 
-        //JOIN BUTTON          
-        joinBtn.onclick = async (e) => {
-            e.preventDefault();
 
-            const inputs = signForm.querySelectorAll("input");
+// SHOW SIGN UP
+showSignUpBtn.onclick = () => {
+    loginForm.style.display = "none";
+    signForm.style.display = "block";
+};
 
-            const user = {
-                username: inputs[0].value,
-                email: inputs[1].value,
-                password: inputs[2].value
-            };
+// SIGN UP
+joinBtn.onclick = async (e) => {
+    e.preventDefault();
 
-            const res = await fetch("/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(user)
-            });
+    const nickname = document.getElementById("signNickname").value.trim();
+    const username = document.getElementById("signUsername").value.trim();
+    const password = document.getElementById("signPassword").value.trim();
 
-            const data = await res.json();
+    console.log("INVIO AL SERVER:", { nickname, username, password });
 
-            if (res.ok) {
-                showMessage("Registrazione effettuata con successo! Effettua il login.", "success");
+    if (!nickname || !username || !password) {
+        showMessage("Compila tutti i campi", "error");
+        return;
+    }
 
-                inputs.forEach(input => input.value = "");
+    const res = await fetch("/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname, username, password })
+    });
 
-                signForm.style.display = "none";
-                loginForm.style.display = "block";
-            } else {
-                showMessage(data.message || "Errore registrazione", "error");
-            }
-        };
-        //FORGOT PASSWORD
-        forgotBtn.onclick = (e) => {
-            e.preventDefault();
-            loginForm.style.display = "none";
-            signForm.style.display = "none";
-            resetForm.style.display = "block";
-        };
+    const data = await res.json();
 
-        // torna al login con freccia
-        document.querySelector(".backBtnReset").onclick = () => {
-            resetForm.style.display = "none";
-            loginForm.style.display = "block";
-        };
+    if (res.ok) {
+        showMessage("Registrazione effettuata! Effettua il login.", "success");
 
-        // CHANGE PASSWORD
-        changePasswordBtn.onclick = async () => {
-            const inputs = resetForm.querySelectorAll("input");
+        document.getElementById("signNickname").value = "";
+        document.getElementById("signUsername").value = "";
+        document.getElementById("signPassword").value = "";
 
-            const data = {
-                username: inputs[0].value,
-                email: inputs[1].value,
-                newPassword: inputs[2].value
-            };
+        signForm.style.display = "none";
+        loginForm.style.display = "block";
+    } else {
+        showMessage(data.message || "Errore registrazione", "error");
+    }
+};
 
-            const res = await fetch("/change-password", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
 
-            const result = await res.json();
+// FORGOT PASSWORD
+forgotBtn.onclick = (e) => {
+    e.preventDefault();
+    loginForm.style.display = "none";
+    signForm.style.display = "none";
+    resetForm.style.display = "block";
+};
 
-            if (res.ok) {
-                showMessage("Password aggiornata! Effettua il login.", "success");
-                inputs.forEach(i => i.value = "");
-                resetForm.style.display = "none";
-                loginForm.style.display = "block";
-            } else {
-                showMessage(result.message, "error");
-            }
-        };
+// RESET PASSWORD
+changePasswordBtn.onclick = async () => {
+    const nickname = document.getElementById("resetNickname").value.trim();
+    const username = document.getElementById("resetUsername").value.trim();
+    const newPassword = document.getElementById("resetPassword").value.trim();
 
-        document.querySelector(".backBtnLogin").onclick = () => {
-            loginBox.style.display = "none";
-            startScreen.style.display = "flex";
-        };
+    if (!nickname || !username || !newPassword) {
+        showMessage("Compila tutti i campi", "error");
+        return;
+    }
 
-        document.querySelector(".backBtnSign").onclick = () => {
-            signForm.style.display = "none";
-            loginForm.style.display = "block";
-        };
+    const res = await fetch("/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname, username, newPassword })
+    });
 
-        window.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll("#loginForm input, #signForm input").forEach(input => input.value = "");
-        });
+    const data = await res.json();
 
-        window.addEventListener("pageshow", (event) => {
-            document.querySelectorAll("#loginForm input, #signForm input").forEach(input => input.value = "");
+    if (res.ok) {
+        showMessage("Password aggiornata! Effettua il login.", "success");
+        document.getElementById("resetNickname").value = "";
+        document.getElementById("resetUsername").value = "";
+        document.getElementById("resetPassword").value = "";
+        resetForm.style.display = "none";
+        loginForm.style.display = "block";
+    } else {
+        showMessage(data.message || "Errore", "error");
+    }
+};
 
-            if (event.persisted) {
-                const msg = document.getElementById("messageBox");
-                if (msg) {
-                    msg.textContent = "";
-                    msg.className = "message-box";
-                }
 
-                localStorage.removeItem("transMessage");
-            }
-        });
+// BACK BUTTONS
+document.querySelector(".backBtnLogin").onclick = () => {
+    loginBox.style.display = "none";
+    startScreen.style.display = "flex";
+};
+document.querySelector(".backBtnSign").onclick = () => {
+    signForm.style.display = "none";
+    loginForm.style.display = "block";
+};
+document.querySelector(".backBtnReset").onclick = () => {
+    resetForm.style.display = "none";
+    loginForm.style.display = "block";
+};
 
-        function showMessage(msg, type = "success") {
-            messageBox.textContent = msg;
-            messageBox.className = `message-box show ${type}`;
-
-            setTimeout(() => {
-                messageBox.className = `message-box ${type}`;
-            }, 2000);
-        }
-    </script>
+// MESSAGE
+function showMessage(msg, type = "success") {
+    messageBox.textContent = msg;
+    messageBox.className = `message-box show ${type}`;
+    setTimeout(() => { messageBox.className = `message-box ${type}`; }, 2000);
+}
+</script>
 </body>
 </html>
