@@ -3,6 +3,29 @@
   box-sizing: border-box;
   font-family: 'comfortaa',Arial, Helvetica, sans-serif;
 }
+.password-field {
+  position: relative;
+}
+
+.eyeicon {
+  position: absolute;
+  right: 0px;
+  top: 53%;
+  transform: translateY(-50%);
+  align-items: center;
+  width: 80px;        /* dimensione fissa */
+  height: 80px;
+  object-fit: contain; /* mantiene proporzioni */
+  
+  cursor: pointer;
+  opacity: 0.8;
+  transition: 0.2s ease;
+}
+
+.eyeicon:hover {
+  opacity: 1;
+}
+
 
 body {
   margin: 0;
