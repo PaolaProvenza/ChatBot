@@ -45,18 +45,20 @@
                 <p id="heading">Login</p>                
 
                 <div class="field">
-                    <input id="loginUsername" class="input-field" type="text" placeholder="Username" required maxlength="30">
+                    <input id="loginUsername" class="input-field" type="text" placeholder="Username"  maxlength="30">
                 </div>
-                <div class="field">
-                    <input id="loginPassword" class="input-field" type="password" placeholder="Password" required maxlength="15">
+                <div class="field password-field">
+                    <input id="loginPassword" class="input-field password-input" type="password" placeholder="Password" maxlength="15">
+                    <img src="immagini/hide2.png" class="eyeicon toggle-password">
                 </div>
+                
 
                 <div class="btn">
-                    <button type="button" class="button1" id="loginBtn">Login</button>
+                    <button type="submit" class="button1" id="loginBtn">Login</button>
                     <button type="button" class="button2" id="showSignUpBtn">Sign Up</button>
                 </div>
 
-                <button class="button3" id="forgotPassword">Forgot Password</button>
+                <button type="submit" class="button3" id="forgotPassword">Forgot Password</button>
             </form>
 
             <!-- SIGN UP FORM -->
@@ -69,16 +71,19 @@
                 <p id="heading">Sign Up</p>
             
                 <div class="field">
-                    <input id="signNickname" class="input-field" type="text" placeholder="Nickname" maxlength="30" required>
+                    <input id="signNickname" class="input-field" type="text" placeholder="Nickname" maxlength="30">
                 </div>
             
                 <div class="field">
-                    <input id="signUsername" class="input-field" type="text" placeholder="Username (unico)" maxlength="30" required>
+                    <input id="signUsername" class="input-field" type="text" placeholder="Username (unico)" maxlength="30">
                 </div>
             
-                <div class="field">
-                    <input id="signPassword" class="input-field" type="password" placeholder="Password" maxlength="15" required>
+                <div class="field password-field">
+                    <input id="signPassword" class="input-field password-input" type="password" placeholder="Password" maxlength="15">
+                    <img src="immagini/hide2.png" class="eyeicon toggle-password">
                 </div>
+                
+                
             
                 <div class="btn">
                     <button type="submit" class="button2" id="joinBtn">Join Us</button>
@@ -87,7 +92,7 @@
             
 
             <!-- RESET PASSWORD FORM -->
-            <form class="form2" id="resetForm" style="display:none;">
+            <form class="form2" id="resetForm" style="display:none;" autocomplete="off">
                 <div class="back-arrow backBtnReset">
                     <svg viewBox="0 0 24 24">
                         <path d="M15 18l-6-6 6-6" />
@@ -96,19 +101,21 @@
                 <p id="heading">Change Password</p>
             
                 <div class="field">
-                    <input id="resetNickname" class="input-field" type="text" placeholder="Nickname" required maxlength="30">
+                    <input id="resetNickname" class="input-field" type="text" placeholder="Nickname" maxlength="30">
                 </div>
             
                 <div class="field">
-                    <input id="resetUsername" class="input-field" type="text" placeholder="Username" required maxlength="30">
+                    <input id="resetUsername" class="input-field" type="text" placeholder="Username" maxlength="30">
                 </div>
             
-                <div class="field">
-                    <input id="resetPassword" class="input-field" type="password" placeholder="New Password" required maxlength="15">
-                </div>
+                <div class="field password-field">
+                    <input id="resetPassword" class="input-field password-input" type="password" placeholder="New Password" maxlength="15" autocomplete="new-password">
+                    <img src="immagini/hide2.png" class="eyeicon toggle-password">
+                </div>                
+                
             
                 <div class="btn">
-                    <button type="button" class="button2" id="changePasswordBtn">Change</button>
+                    <button type="submit" class="button2" id="changePasswordBtn">Change</button>
                 </div>
             </form>
             
@@ -130,6 +137,87 @@ const joinBtn = document.getElementById("joinBtn");
 const changePasswordBtn = document.getElementById("changePasswordBtn");
 const forgotBtn = document.getElementById("forgotPassword");
 const messageBox = document.getElementById("messageBox");
+// RESET PASSWORD FORM
+resetForm.addEventListener("submit", async (e) => {
+    e.preventDefault(); // Blocca il comportamento di default (anche Enter)
+
+    const nickname = document.getElementById("resetNickname").value.trim();
+    const username = document.getElementById("resetUsername").value.trim();
+    const newPassword = document.getElementById("resetPassword").value.trim();
+
+    if (!nickname || !username || !newPassword) {
+        showMessage("Compila tutti i campi", "error");
+        return;
+    }
+
+    try {
+        const res = await fetch("/change-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nickname, username, newPassword })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            showMessage("Password aggiornata! Effettua il login.", "success");
+            resetForm.reset();
+            resetForm.style.display = "none";
+            loginForm.style.display = "block";
+        } else {
+            showMessage(data.message || "Errore", "error");
+        }
+    } catch (err) {
+        console.error(err);
+        showMessage("Errore di connessione", "error");
+    }
+});
+
+
+
+loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!username || !password) {
+        showMessage("Compila tutti i campi", "error");
+        return;
+    }
+
+    const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+        localStorage.setItem("loggedUser", data.nickname);
+        showMessage("Login effettuato con successo!", "success");
+        setTimeout(() => {
+            window.location.href = "chat.html";
+        }, 1000);
+    } else {
+        showMessage(data.message || "Credenziali errate", "error");
+    }
+});
+
+document.querySelectorAll(".toggle-password").forEach(icon => {
+    icon.addEventListener("click", function() {
+        const input = this.parentElement.querySelector(".password-input");
+
+        if (input.type === "password") {
+            input.type = "text";
+            this.src = "immagini/view2.png";
+        } else {
+            input.type = "password";
+            this.src = "immagini/hide2.png";
+        }
+    });
+});
 
 // NEXT button
 enterBtn.onclick = () => {
@@ -229,35 +317,7 @@ forgotBtn.onclick = (e) => {
 };
 
 // RESET PASSWORD
-changePasswordBtn.onclick = async () => {
-    const nickname = document.getElementById("resetNickname").value.trim();
-    const username = document.getElementById("resetUsername").value.trim();
-    const newPassword = document.getElementById("resetPassword").value.trim();
 
-    if (!nickname || !username || !newPassword) {
-        showMessage("Compila tutti i campi", "error");
-        return;
-    }
-
-    const res = await fetch("/change-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nickname, username, newPassword })
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-        showMessage("Password aggiornata! Effettua il login.", "success");
-        document.getElementById("resetNickname").value = "";
-        document.getElementById("resetUsername").value = "";
-        document.getElementById("resetPassword").value = "";
-        resetForm.style.display = "none";
-        loginForm.style.display = "block";
-    } else {
-        showMessage(data.message || "Errore", "error");
-    }
-};
 
 
 // BACK BUTTONS
