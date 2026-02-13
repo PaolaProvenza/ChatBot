@@ -187,7 +187,7 @@ app.post("/logout", (req, res) => {
 
 */
 // Avvio server
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Server attivo su http://0.0.0.0:${PORT}`);
 });
 
