@@ -33,6 +33,9 @@
     </div>
 
     <div class="frame-chat" id="chatContainer">
+      <!-- Area per i messaggi -->
+      <div class="chat-messages" id="chatMessages"></div>
+      
       <div class="message">
         <!-- Pulsante + per upload file -->
         <div class="fileUploadWrapper">
@@ -75,6 +78,7 @@
 const messageInput = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
 const chatContainer = document.getElementById("chatContainer");
+const chatMessages = document.getElementById("chatMessages");
 
 function addMessageToChat(text, sender = "user") {
     if (!text.trim()) return; // evita messaggi vuoti
@@ -83,23 +87,47 @@ function addMessageToChat(text, sender = "user") {
     messageDiv.className = `chat-message ${sender}`;
     messageDiv.textContent = text;
 
-    chatContainer.appendChild(messageDiv);
-    chatContainer.scrollTop = chatContainer.scrollHeight; // scroll automatico
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // scroll automatico
     messageInput.value = ""; // pulisce input
 }
+async function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text) return;
 
-// Invio con click
-sendButton.addEventListener("click", () => {
-    addMessageToChat(messageInput.value);
-});
+    // Mostra subito il messaggio dell'utente
+    addMessageToChat(text, "user");
 
-// Invio con tasto Enter
+    try {
+        const res = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+
+        // Mostra la risposta del bot
+        addMessageToChat(data.reply, "bot");
+    } catch (err) {
+        console.error("Errore chat:", err);
+        addMessageToChat("Errore di connessione", "bot");
+    }
+
+    messageInput.value = "";
+}
+
+// Click sul pulsante
+sendButton.addEventListener("click", sendMessage);
+
+// Invio con Enter
 messageInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-        e.preventDefault(); // evita invio predefinito
-        addMessageToChat(messageInput.value);
+        e.preventDefault();
+        sendMessage();
     }
 });
+
 
     fetch("/check-auth")
     .then(res => {
@@ -147,6 +175,10 @@ messageInput.addEventListener("keydown", (e) => {
         localStorage.removeItem("transMessage");
     }
 });
+
+
+
+
 
 </script>
 </html>
