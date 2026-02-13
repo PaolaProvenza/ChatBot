@@ -107,9 +107,21 @@ app.post("/chat", (req, res) => {
     const msg = req.body.message.toLowerCase();
     let reply = "Non ho capito";
 
-    if (msg.includes("ciao")) reply = "Ciao! Come posso aiutarti oggi?";
-    else if (msg.includes("come stai")) reply = "Sto benissimo!";
-    else if (msg.includes("chi sei")) reply = "Sono NovAI, il tuo assistente virtuale!";
+    if (msg.includes("ciao") || msg.includes("salve"))
+      reply = "Ciao! 😊";
+    
+    else if (msg.includes("come stai"))
+      reply = "Sto benissimo! E tu?";
+    
+    else if (msg.includes("nome"))
+      reply = "Mi chiamo NovAI.";
+    
+    else if (msg.includes("aiuto"))
+      reply = "Posso aiutarti con informazioni, domande o curiosità!";
+    
+    else if (msg.includes("grazie"))
+      reply = "Di nulla! 😊";
+    
 
     res.json({ reply });
   } catch (e) {
