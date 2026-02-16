@@ -124,6 +124,8 @@
     </div>
 
 <script>
+localStorage.removeItem("loggedUser");
+
 const enterBtn = document.getElementById("enterBtn");
 const startScreen = document.getElementById("startScreen");
 const loginBox = document.getElementById("loginBox");
@@ -196,6 +198,11 @@ loginForm.addEventListener("submit", async (e) => {
 
     if (res.ok) {
         localStorage.setItem("loggedUser", data.nickname);
+        
+        localStorage.setItem("transMessage", JSON.stringify({
+            text: "Login effettuato con successo!",
+            type: "success"
+        }));
         showMessage("Login effettuato con successo!", "success");
         setTimeout(() => {
             window.location.href = "chat.html";
@@ -340,6 +347,7 @@ function showMessage(msg, type = "success") {
     messageBox.className = `message-box show ${type}`;
     setTimeout(() => { messageBox.className = `message-box ${type}`; }, 2000);
 }
+
 </script>
 </body>
 </html>
