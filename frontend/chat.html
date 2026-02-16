@@ -19,16 +19,17 @@
     </div>
 
     <div class="barra">
-        <!--POI AGGIUNGIAMO IL LOGOUT DALLA CHAT-->
-        <!--<button id="logoutBtn">Logout</button>-->
-
         <div class="chat-header">
             <h1 class="titolo">NovAI!</h1>
         </div>
-
+    
         <div class="logo" id="logo">
             <img src="immagini/Logo.png" class="img-logo">
-            <p class="utente"> </p>
+            <p class="utente"></p>
+        </div>
+    
+        <div id="logoMenu" class="logo-menu hidden">
+            <button id="logoutOption">Logout</button>
         </div>
     </div>
 
@@ -72,13 +73,74 @@
       </div>
       
     </div>
+    <div id="logoutConfirm" class="logout-confirm hidden">
+        <div class="logout-box">
+          <p>Sei sicuro di voler uscire?</p>
+          <div class="logout-buttons">
+            <button id="confirmLogout">Confirm</button>
+            <button id="cancelLogout">Delete</button>
+          </div>
+        </div>
+    </div>
+      
 </body>
 
 <script>
+fetch("/check-auth")
+  .then(res => {
+    if (!res.ok) {
+      localStorage.removeItem("loggedUser");
+      window.location.href = "index.html";
+    }
+  });
+   
 const messageInput = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
 const chatContainer = document.getElementById("chatContainer");
 const chatMessages = document.getElementById("chatMessages");
+
+const logo = document.getElementById("logo");
+const logoMenu = document.getElementById("logoMenu");
+const logoutOption = document.getElementById("logoutOption");
+
+const logoutConfirm = document.getElementById("logoutConfirm");
+const confirmLogout = document.getElementById("confirmLogout");
+const cancelLogout = document.getElementById("cancelLogout");
+
+// mostra/nasconde menu SOLO cliccando il logo
+logo.addEventListener("click", (e) => {
+  e.stopPropagation();
+  logoMenu.classList.toggle("hidden");
+});
+
+// clic logout → conferma
+logoutOption.onclick = () => {
+  logoMenu.classList.add("hidden");
+  logoutConfirm.classList.remove("hidden");
+};
+
+
+// annulla
+cancelLogout.onclick = () => {
+  logoutConfirm.classList.add("hidden");
+};
+
+// conferma logout
+confirmLogout.onclick = async () => {
+  await fetch("/logout", { method: "POST" });
+
+  // cancella utente salvato
+  localStorage.removeItem("loggedUser");
+
+  // torna alla home
+  window.location.href = "index.html";
+};
+
+
+// clic fuori → chiude menu
+document.addEventListener("click", () => {
+  logoMenu.classList.add("hidden");
+});
 
 function addMessageToChat(text, sender = "user") {
     if (!text.trim()) return; // evita messaggi vuoti
@@ -128,37 +190,14 @@ messageInput.addEventListener("keydown", (e) => {
     }
 });
 
-
-    fetch("/check-auth")
-    .then(res => {
-        if (!res.ok) window.location.href = "/";
-    });
-
-
-    logo.onclick = () => {
-        console.log("Logo cliccato — qui torni indietro");
-        window.location.href = "index.html";
-    };
-
-    //COLLEGATO AL BOTTONE DI LOGOUT
-    //const logoutBtn = document.getElementById("logoutBtn");
-
-    //logoutBtn.onclick = () => {
-    // rimuove l’utente loggato da localStorage
-    //localStorage.removeItem("loggedUser");
-
-    //torna alla pagina di login
-    //window.location.href = "index.html";
-    //};
-
-    window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
     const nickname = localStorage.getItem("loggedUser");
     const userEl = document.querySelector(".utente");
 
     if (nickname && userEl) {
-        userEl.textContent = nickname;  // <-- mostra il nickname corretto
+        userEl.textContent = nickname;  // mostra il nickname corretto
     } else {
-        userEl.textContent = "Utente"; // fallback
+        window.location.href = "index.html";
     }
 
     const data = JSON.parse(localStorage.getItem("transMessage"));
@@ -171,12 +210,10 @@ messageInput.addEventListener("keydown", (e) => {
 
         setTimeout(() => {
             messageBox.className = `message-box ${data.type}`;
-        }, 2000);
+        }, 1000);
         localStorage.removeItem("transMessage");
     }
 });
-
-
 
 
 

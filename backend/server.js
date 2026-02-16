@@ -4,10 +4,12 @@ const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
+//const axios = require("axios");
 const app = express();
 const PORT = 8080;
 
 const USERS_FILE = path.join(__dirname, "users.json");
+//const conversations = {}; // { username: [ { role: "user"/"assistant", content: "..." }, ... ] }
 
 // Configurazione sessione
 app.use(session({
@@ -29,8 +31,20 @@ if (!fs.existsSync(USERS_FILE)) {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../frontend"), {
+  index: "index.html",
+  extensions: ["html"],
+  redirect: false
+}));
 
+// PROTEZIONE CHAT
+app.get("/chat.html", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/index.html");
+  }
+
+  res.sendFile(path.join(__dirname, "../frontend/chat.html"));
+});
 
 // Funzioni di utilità
 function readUsers() {
@@ -139,14 +153,6 @@ app.post("/change-password", async (req, res) => {
   res.json({ message: "Password aggiornata con successo" });
 });
 
-// CHAT.HTML
-app.get("/chat.html", (req, res) => {
-  if (!req.session.user) {
-    return res.redirect("/"); // rimanda al login
-  }
-  res.sendFile(path.join(__dirname, "../frontend/chat.html"));
-});
-
 // CHECK AUTH
 app.get("/check-auth", (req, res) => {
   if (req.session.user) {
@@ -156,16 +162,18 @@ app.get("/check-auth", (req, res) => {
   }
 });
 
-/*
 app.post("/logout", (req, res) => {
   req.session.destroy(err => {
-    if (err) return res.status(500).json({ message: "Errore logout" });
-    res.clearCookie("connect.sid"); // pulisce il cookie
+    if (err) {
+      console.error("Errore logout:", err);
+      return res.status(500).json({ message: "Errore logout" });
+    }
+
+    res.clearCookie("connect.sid");
     res.json({ message: "Logout effettuato" });
   });
 });
 
-*/
 
 // Avvio server
 app.listen(PORT, () => {
