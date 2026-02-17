@@ -78,7 +78,7 @@
           <p>Sei sicuro di voler uscire?</p>
           <div class="logout-buttons">
             <button id="confirmLogout">Confirm</button>
-            <button id="cancelLogout">Delete</button>
+            <button id="cancelLogout">Cancel</button>
           </div>
         </div>
     </div>
@@ -200,19 +200,6 @@ window.addEventListener("DOMContentLoaded", () => {
         window.location.href = "index.html";
     }
 
-    const data = JSON.parse(localStorage.getItem("transMessage"));
-    if (data) {
-        const messageBox = document.createElement("div");
-        messageBox.id = "messageBox";
-        messageBox.className = `message-box ${data.type} show`;
-        messageBox.textContent = data.text;
-        document.body.appendChild(messageBox);
-
-        setTimeout(() => {
-            messageBox.className = `message-box ${data.type}`;
-        }, 1000);
-        localStorage.removeItem("transMessage");
-    }
 });
 
 
