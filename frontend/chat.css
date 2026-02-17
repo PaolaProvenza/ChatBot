@@ -43,6 +43,7 @@
   left: 3em;
   height: 5rem;
   z-index: 12;
+  cursor: pointer;
 }
 
 .img-logo {
@@ -295,6 +296,7 @@
 
 .logout-buttons {
   margin-top: 18px;
+  padding: 12px;
   display: flex;
   justify-content: center;
   gap: 15px;
@@ -309,15 +311,23 @@
 }
 
 #confirmLogout {
+  background: rgb(19,6,31);
+  color: white;
+  border: #3c3c3c 1px solid;
+}
+#confirmLogout:hover {
   background: #d4001c;
   color: white;
 }
-
 #cancelLogout {
+  background: rgb(19,6,31);
+  color: white;
+  border: #3c3c3c 1px solid;
+}
+#cancelLogout:hover {
   background: #7c3aed;
   color: white;
 }
-
 .hidden {
   display: none !important;
 }
@@ -328,7 +338,7 @@
   background: rgb(19,6,31);
   border: 1px solid rgb(63,63,63);
   border-radius: 8px;
-  padding: 8px;
+  padding: 12px;
   z-index: 20;
 }
 
