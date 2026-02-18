@@ -21,7 +21,12 @@
     <div class="barra">
         <div class="chat-header">
             <h1 class="titolo">NovAI!</h1>
+            <div id="aiStatus" class="ai-status">
+                <span class="ai-indicator"></span>
+                <span class="ai-text">Verifica AI...</span>
+            </div>
         </div>
+
     
         <div class="logo" id="logo">
             <img src="immagini/Logo.png" class="img-logo">
@@ -29,15 +34,54 @@
         </div>
     
         <div id="logoMenu" class="logo-menu hidden">
+            <button id="historyOption">Storico Chat</button>
             <button id="logoutOption">Logout</button>
         </div>
     </div>
 
+    <!-- Sidebar Storico Chat -->
+    <div id="historySidebar" class="history-sidebar hidden">
+        <div class="history-header">
+            <h3>Storico Chat</h3>
+            <button id="closeHistory" class="close-btn">×</button>
+        </div>
+        <div class="history-actions">
+            <button id="newChatBtn" class="action-btn">+ Nuova Chat</button>
+        </div>
+        <div id="chatsList" class="chats-list">
+            <!-- Le chat verranno caricate qui -->
+        </div>
+    </div>
+
+
     <div class="frame-chat" id="chatContainer">
+      <!-- Pulsante Save in alto a destra -->
+      <button id="saveChatBtn" class="save-cloud-btn">
+
+        <div class="svg-wrapper-1">
+          <div class="svg-wrapper">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              class="icon"
+            >
+              <path
+                d="M22,15.04C22,17.23 20.24,19 18.07,19H5.93C3.76,19 2,17.23 2,15.04C2,13.07 3.43,11.44 5.31,11.14C5.28,11 5.27,10.86 5.27,10.71C5.27,9.33 6.38,8.2 7.76,8.2C8.37,8.2 8.94,8.43 9.37,8.8C10.14,7.05 11.13,5.44 13.91,5.44C17.28,5.44 18.87,8.06 18.87,10.83C18.87,10.94 18.87,11.06 18.86,11.17C20.65,11.54 22,13.13 22,15.04Z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <span>Salva</span>
+      </button>
+      
       <!-- Area per i messaggi -->
       <div class="chat-messages" id="chatMessages"></div>
+
       
       <div class="message">
+
         <!-- Pulsante + per upload file -->
         <div class="fileUploadWrapper">
           <label for="file">
@@ -52,7 +96,7 @@
         </div>
       
         <!-- Input messaggio -->
-        <input type="text" id="messageInput" placeholder="Message..." />
+        <input autocomplete="off" type="text" id="messageInput" placeholder="Message..." />
       
         <!-- Pulsante invio -->
         <button id="sendButton">
@@ -73,15 +117,47 @@
       </div>
       
     </div>
+    <!-- Message Box Personalizzati -->
+    <div id="customAlert" class="logout-confirm hidden">
+        <div class="logout-box">
+          <p id="alertMessage">Messaggio</p>
+          <div class="logout-buttons">
+            <button id="alertOk" class="confirm-btn">OK</button>
+          </div>
+        </div>
+    </div>
+    
+    <div id="customConfirm" class="logout-confirm hidden">
+        <div class="logout-box">
+          <p id="confirmMessage">Sei sicuro?</p>
+          <div class="logout-buttons">
+            <button id="confirmYes" class="confirm-btn">Sì</button>
+            <button id="confirmNo" class="cancel-btn">No</button>
+          </div>
+        </div>
+    </div>
+    
+    <div id="customPrompt" class="logout-confirm hidden">
+        <div class="logout-box">
+          <p id="promptMessage">Inserisci valore:</p>
+          <input type="text" id="promptInput" class="prompt-input" placeholder="..." />
+          <div class="logout-buttons">
+            <button id="promptOk" class="confirm-btn">OK</button>
+            <button id="promptCancel" class="cancel-btn">Annulla</button>
+          </div>
+        </div>
+    </div>
+    
     <div id="logoutConfirm" class="logout-confirm hidden">
         <div class="logout-box">
           <p>Sei sicuro di voler uscire?</p>
           <div class="logout-buttons">
-            <button id="confirmLogout">Confirm</button>
-            <button id="cancelLogout">Cancel</button>
+            <button id="confirmLogout" class="confirm-btn">Sì</button>
+            <button id="cancelLogout" class="cancel-btn">No</button>
           </div>
         </div>
     </div>
+
       
 </body>
 
@@ -102,10 +178,223 @@ const chatMessages = document.getElementById("chatMessages");
 const logo = document.getElementById("logo");
 const logoMenu = document.getElementById("logoMenu");
 const logoutOption = document.getElementById("logoutOption");
+const historyOption = document.getElementById("historyOption");
 
 const logoutConfirm = document.getElementById("logoutConfirm");
 const confirmLogout = document.getElementById("confirmLogout");
 const cancelLogout = document.getElementById("cancelLogout");
+
+// Elementi message box personalizzati
+const customAlert = document.getElementById("customAlert");
+const alertMessage = document.getElementById("alertMessage");
+const alertOk = document.getElementById("alertOk");
+
+const customConfirm = document.getElementById("customConfirm");
+const confirmMessage = document.getElementById("confirmMessage");
+const confirmYes = document.getElementById("confirmYes");
+const confirmNo = document.getElementById("confirmNo");
+
+const customPrompt = document.getElementById("customPrompt");
+const promptMessage = document.getElementById("promptMessage");
+const promptInput = document.getElementById("promptInput");
+const promptOk = document.getElementById("promptOk");
+const promptCancel = document.getElementById("promptCancel");
+
+// Elementi storico chat
+
+const historySidebar = document.getElementById("historySidebar");
+const closeHistory = document.getElementById("closeHistory");
+const newChatBtn = document.getElementById("newChatBtn");
+const chatsList = document.getElementById("chatsList");
+const saveChatBtn = document.getElementById("saveChatBtn");
+
+// Stato applicazione
+let currentChatId = null;
+let chatHistory = [];
+
+// Chiave per localStorage
+const CHAT_STORAGE_KEY = 'novai_current_chat';
+
+// Salva chat corrente nel localStorage
+function saveChatToStorage() {
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chatHistory));
+}
+
+// Carica chat dal localStorage
+function loadChatFromStorage() {
+    const saved = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (saved) {
+        try {
+            const messages = JSON.parse(saved);
+            if (Array.isArray(messages) && messages.length > 0) {
+                chatHistory = messages;
+                loadChatMessages(messages);
+                return true;
+            }
+        } catch (e) {
+            console.error("Errore caricamento chat da storage:", e);
+        }
+    }
+    return false;
+}
+
+// Pulisci storage quando si crea nuova chat
+function clearChatStorage() {
+    localStorage.removeItem(CHAT_STORAGE_KEY);
+}
+
+
+// Callback per message box
+let confirmCallback = null;
+let promptCallback = null;
+
+// Funzione Alert personalizzata
+function showAlert(message) {
+    return new Promise((resolve) => {
+        alertMessage.textContent = message;
+        customAlert.classList.remove("hidden");
+        
+        alertOk.onclick = () => {
+            customAlert.classList.add("hidden");
+            resolve();
+        };
+    });
+}
+
+// Funzione Confirm personalizzata
+function showConfirm(message) {
+    return new Promise((resolve) => {
+        confirmMessage.textContent = message;
+        customConfirm.classList.remove("hidden");
+        
+        confirmYes.onclick = () => {
+            customConfirm.classList.add("hidden");
+            resolve(true);
+        };
+        
+        confirmNo.onclick = () => {
+            customConfirm.classList.add("hidden");
+            resolve(false);
+        };
+    });
+}
+
+// Funzione Prompt personalizzata
+function showPrompt(message, defaultValue = "") {
+    return new Promise((resolve) => {
+        promptMessage.textContent = message;
+        promptInput.value = defaultValue;
+        customPrompt.classList.remove("hidden");
+        promptInput.focus();
+        
+        promptOk.onclick = () => {
+            const value = promptInput.value.trim();
+            customPrompt.classList.add("hidden");
+            resolve(value);
+        };
+        
+        promptCancel.onclick = () => {
+            customPrompt.classList.add("hidden");
+            resolve(null);
+        };
+        
+        promptInput.onkeydown = (e) => {
+            if (e.key === "Enter") {
+                promptOk.click();
+            }
+        };
+    });
+}
+
+
+// Verifica stato AI all'avvio
+async function checkAIStatus() {
+    const statusEl = document.getElementById("aiStatus");
+    const indicator = statusEl.querySelector(".ai-indicator");
+    const text = statusEl.querySelector(".ai-text");
+    
+    console.log("Verifico stato AI...");
+    
+    // Imposta stato iniziale "verifica in corso"
+    statusEl.className = "ai-status";
+    indicator.className = "ai-indicator checking";
+    text.textContent = "Verifica AI...";
+    
+    try {
+        // Aggiungi timeout per evitare attesa infinita
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
+        console.log("Chiamata a /ai-status...");
+        const res = await fetch("/ai-status", {
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        
+        console.log("Risposta ricevuta:", res.status, res.ok);
+        
+        // Se la risposta HTTP non è OK (es. 503), gestisci come offline
+        if (!res.ok) {
+            let errorData = {};
+            try {
+                errorData = await res.json();
+                console.log("Dati errore:", errorData);
+            } catch (e) {
+                console.log("Non riesco a parsare la risposta di errore");
+            }
+            
+            console.log("Ollama OFFLINE (risposta non OK)");
+            statusEl.className = "ai-status offline";
+            indicator.className = "ai-indicator offline";
+            text.textContent = `🦙 ${errorData.error || "Ollama Offline"}`;
+            return;
+        }
+        
+        const data = await res.json();
+        console.log("Dati ricevuti:", data);
+        
+        if (data.ollamaRunning && data.modelAvailable) {
+            console.log("Ollama ONLINE e modello disponibile");
+            statusEl.className = "ai-status online";
+            indicator.className = "ai-indicator online";
+            text.textContent = "🦙 AI Locale Attiva";
+        } else if (data.ollamaRunning) {
+            console.log("Ollama ONLINE ma modello non disponibile");
+            statusEl.className = "ai-status warning";
+            indicator.className = "ai-indicator warning";
+            text.textContent = `🦙 Modello ${data.model} non trovato`;
+        } else {
+            console.log("Ollama OFFLINE (ollamaRunning: false)");
+            statusEl.className = "ai-status offline";
+            indicator.className = "ai-indicator offline";
+            text.textContent = `🦙 ${data.error || "Ollama Offline"}`;
+        }
+    } catch (err) {
+        console.error("Errore verifica AI status:", err);
+        console.error("Tipo errore:", err.name, "- Messaggio:", err.message);
+        
+        console.log("Ollama OFFLINE (errore di connessione)");
+        statusEl.className = "ai-status offline";
+        indicator.className = "ai-indicator offline";
+        
+        // Messaggio più specifico in base al tipo di errore
+        if (err.name === 'AbortError') {
+            text.textContent = "🦙 Timeout - Server non risponde";
+        } else if (err.message.includes('fetch') || err.message.includes('network')) {
+            text.textContent = "🦙 Server non raggiungibile";
+        } else {
+            text.textContent = "🦙 Ollama Non Connesso";
+        }
+    }
+}
+
+
+
+
+// Controlla stato AI ogni 30 secondi
+setInterval(checkAIStatus, 30000);
+
+
 
 // mostra/nasconde menu SOLO cliccando il logo
 logo.addEventListener("click", (e) => {
@@ -118,6 +407,36 @@ logoutOption.onclick = () => {
   logoMenu.classList.add("hidden");
   logoutConfirm.classList.remove("hidden");
 };
+
+// clic storico → apri sidebar (solo se non in attesa)
+historyOption.onclick = () => {
+  if (isWaitingForResponse) {
+    showAlert("Attendi la risposta dell'AI prima di cambiare chat");
+    return;
+  }
+  logoMenu.classList.add("hidden");
+  historySidebar.classList.remove("hidden");
+  loadChatsList();
+};
+
+
+// chiudi sidebar storico
+closeHistory.onclick = () => {
+  historySidebar.classList.add("hidden");
+};
+
+// nuova chat (solo se non in attesa)
+newChatBtn.onclick = () => {
+  if (isWaitingForResponse) {
+    showAlert("Attendi la risposta dell'AI prima di creare una nuova chat");
+    return;
+  }
+  clearChat();
+  currentChatId = null;
+  historySidebar.classList.add("hidden");
+};
+
+
 
 
 // annulla
@@ -151,33 +470,142 @@ function addMessageToChat(text, sender = "user") {
 
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight; // scroll automatico
-    messageInput.value = ""; // pulisce input
+    
+    // Aggiungi alla cronologia locale
+    chatHistory.push({ role: sender, content: text, timestamp: new Date().toISOString() });
+    
+    // Salva nel localStorage
+    saveChatToStorage();
 }
+
+
+function clearChat() {
+    chatMessages.innerHTML = "";
+    chatHistory = [];
+    currentChatId = null;
+    clearChatStorage();
+}
+
+
+function loadChatMessages(messages) {
+    chatMessages.innerHTML = "";
+    chatHistory = [...messages];
+    
+    messages.forEach(msg => {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `chat-message ${msg.role}`;
+        messageDiv.textContent = msg.content;
+        chatMessages.appendChild(messageDiv);
+    });
+    
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Variabili per gestione caricamento
+let isWaitingForResponse = false;
+let currentRequestController = null;
+const aiLoadingOverlay = document.getElementById("aiLoadingOverlay");
+
+
+function showLoadingOverlay() {
+    if (aiLoadingOverlay) {
+        aiLoadingOverlay.classList.remove("hidden");
+    }
+}
+
+function hideLoadingOverlay() {
+    if (aiLoadingOverlay) {
+        aiLoadingOverlay.classList.add("hidden");
+    }
+}
+
+function showTypingIndicator() {
+
+    const typingDiv = document.createElement("div");
+    typingDiv.className = "chat-message bot typing-indicator";
+    typingDiv.id = "typingIndicator";
+    typingDiv.innerHTML = `
+        <div class="typing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <span class="typing-text">Sto pensando...</span>
+    `;
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function removeTypingIndicator() {
+    const typingDiv = document.getElementById("typingIndicator");
+    if (typingDiv) {
+        typingDiv.remove();
+    }
+}
+
+function setInputEnabled(enabled) {
+    messageInput.disabled = !enabled;
+    sendButton.disabled = !enabled;
+    if (enabled) {
+        messageInput.focus();
+    }
+}
+
 async function sendMessage() {
     const text = messageInput.value.trim();
-    if (!text) return;
+    if (!text || isWaitingForResponse) return;
 
     // Mostra subito il messaggio dell'utente
     addMessageToChat(text, "user");
+    
+    // Pulisci input e disabilita
+    messageInput.value = "";
+    isWaitingForResponse = true;
+    setInputEnabled(false);
+    
+    // Crea nuovo AbortController per questa richiesta
+    currentRequestController = new AbortController();
+    
+    // Mostra overlay di blocco
+    showLoadingOverlay();
+    
+    // Mostra indicatore "Sto pensando..."
+    showTypingIndicator();
 
     try {
         const res = await fetch("/chat", {
+            signal: currentRequestController.signal,
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message: text })
         });
 
+
         const data = await res.json();
 
-        // Mostra la risposta del bot
+        // Rimuovi indicatore e mostra risposta
+        removeTypingIndicator();
         addMessageToChat(data.reply, "bot");
     } catch (err) {
-        console.error("Errore chat:", err);
-        addMessageToChat("Errore di connessione", "bot");
+        if (err.name === 'AbortError') {
+            console.log("Richiesta AI annullata (logout)");
+            removeTypingIndicator();
+            addMessageToChat("Richiesta annullata - logout effettuato", "bot");
+        } else {
+            console.error("Errore chat:", err);
+            removeTypingIndicator();
+            addMessageToChat("Ollama non è connesso. Assicurati di aver avviato Ollama con: ollama run llama3.2", "bot");
+        }
+    } finally {
+        isWaitingForResponse = false;
+        currentRequestController = null;
+        setInputEnabled(true);
+        hideLoadingOverlay();
     }
 
-    messageInput.value = "";
+
 }
+
 
 // Click sul pulsante
 sendButton.addEventListener("click", sendMessage);
@@ -190,6 +618,163 @@ messageInput.addEventListener("keydown", (e) => {
     }
 });
 
+// Salva chat (solo se non in attesa)
+saveChatBtn.addEventListener("click", async () => {
+    if (isWaitingForResponse) {
+        await showAlert("Attendi la risposta dell'AI prima di salvare");
+        return;
+    }
+    
+    if (chatHistory.length === 0) {
+        await showAlert("Non ci sono messaggi da salvare!");
+        return;
+    }
+
+    
+    const title = await showPrompt("Inserisci un titolo per questa chat:", `Chat del ${new Date().toLocaleDateString()}`);
+    if (!title) return;
+    
+    try {
+        const res = await fetch("/save-chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, messages: chatHistory })
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            currentChatId = data.chat.id;
+            await showAlert("Chat salvata con successo! 💾");
+        } else {
+            await showAlert("Errore nel salvataggio della chat");
+        }
+    } catch (err) {
+        console.error("Errore salvataggio:", err);
+        await showAlert("Errore di connessione");
+    }
+});
+
+
+// Carica lista chat
+async function loadChatsList() {
+    try {
+        const res = await fetch("/chats");
+        if (!res.ok) throw new Error("Errore caricamento");
+        
+        const data = await res.json();
+        renderChatsList(data.chats);
+    } catch (err) {
+        console.error("Errore caricamento chat:", err);
+        chatsList.innerHTML = "<p class='error'>Errore caricamento storico</p>";
+    }
+}
+
+// Render lista chat
+function renderChatsList(chats) {
+    if (chats.length === 0) {
+        chatsList.innerHTML = "<p class='no-chats'>Nessuna chat salvata</p>";
+        return;
+    }
+    
+    chatsList.innerHTML = chats.map(chat => `
+        <div class="chat-item" data-id="${chat.id}">
+            <div class="chat-info" onclick="loadChat('${chat.id}')">
+                <div class="chat-title">${escapeHtml(chat.title)}</div>
+                <div class="chat-meta">${new Date(chat.createdAt).toLocaleDateString()} • ${chat.messageCount} messaggi</div>
+            </div>
+            <div class="chat-actions-item">
+                <button onclick="renameChat('${chat.id}', '${escapeHtml(chat.title)}')" title="Rinomina">✏️</button>
+                <button onclick="deleteChat('${chat.id}')" title="Elimina">🗑️</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+// Carica chat specifica (solo se non in attesa)
+async function loadChat(chatId) {
+    if (isWaitingForResponse) {
+        await showAlert("Attendi la risposta dell'AI prima di cambiare chat");
+        return;
+    }
+    
+    try {
+        const res = await fetch(`/chat/${chatId}`);
+
+        if (!res.ok) throw new Error("Chat non trovata");
+        
+        const data = await res.json();
+        loadChatMessages(data.chat.messages);
+        currentChatId = chatId;
+        historySidebar.classList.add("hidden");
+    } catch (err) {
+        console.error("Errore caricamento chat:", err);
+        await showAlert("Errore nel caricamento della chat");
+    }
+}
+
+
+// Rinomina chat
+async function renameChat(chatId, currentTitle) {
+    const newTitle = await showPrompt("Nuovo titolo:", currentTitle);
+    if (!newTitle || newTitle === currentTitle) return;
+    
+    try {
+        const res = await fetch(`/chat/${chatId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: newTitle })
+        });
+        
+        if (res.ok) {
+            loadChatsList();
+        } else {
+            await showAlert("Errore nella rinomina");
+        }
+    } catch (err) {
+        console.error("Errore rinomina:", err);
+        await showAlert("Errore di connessione");
+    }
+}
+
+
+// Elimina chat
+async function deleteChat(chatId) {
+    const confirmed = await showConfirm("Sei sicuro di voler eliminare questa chat?");
+    if (!confirmed) return;
+    
+    try {
+        const res = await fetch(`/chat/${chatId}`, { method: "DELETE" });
+        
+        if (res.ok) {
+            if (currentChatId === chatId) {
+                clearChat();
+            }
+            loadChatsList();
+        } else {
+            await showAlert("Errore nell'eliminazione");
+        }
+    } catch (err) {
+        console.error("Errore eliminazione:", err);
+        await showAlert("Errore di connessione");
+    }
+}
+
+
+// Utility per escaping HTML
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Chiudi sidebar cliccando fuori
+document.addEventListener("click", (e) => {
+    if (!historySidebar.contains(e.target) && !logoMenu.contains(e.target) && !historyOption.contains(e.target)) {
+        historySidebar.classList.add("hidden");
+    }
+});
+
+
 window.addEventListener("DOMContentLoaded", () => {
     const nickname = localStorage.getItem("loggedUser");
     const userEl = document.querySelector(".utente");
@@ -200,9 +785,12 @@ window.addEventListener("DOMContentLoaded", () => {
         window.location.href = "index.html";
     }
 
+    // Carica chat salvata dal localStorage (se presente)
+    loadChatFromStorage();
+
+    // Verifica stato AI all'avvio
+    checkAIStatus();
 });
-
-
 
 </script>
 </html>
