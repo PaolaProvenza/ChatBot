@@ -613,3 +613,5 @@ process.stdin.resume();
 //2. Esegui: ollama pull llama3.2 (o il modello che preferisci)
 //3. Esegui: ollama run llama3.2 (o il modello che hai scelto)
 //in caso processi occupano la porta 8080 -> taskkill /F /IM node.exe; node server.js
+//imposta il fatto che l'ho creato io
+//hacklabcormano.it/VideoSerate/index.html

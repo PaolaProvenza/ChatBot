@@ -1,3 +1,33 @@
 {
-  "paulprovenz": []
+  "paulprovenz": [],
+  "mariannamarchini": [
+    {
+      "id": "458774e1-313f-40d0-bc77-a5e234783e59",
+      "title": "americaa",
+      "messages": [
+        {
+          "role": "user",
+          "content": "bella fra",
+          "timestamp": "2026-02-19T09:16:26.892Z"
+        },
+        {
+          "role": "bot",
+          "content": "Ciao! Sono NovAI, felice di aiutarti. Come posso essere utile oggi?",
+          "timestamp": "2026-02-19T09:16:57.327Z"
+        },
+        {
+          "role": "user",
+          "content": "in che anno è stata scoperta l'america?",
+          "timestamp": "2026-02-19T09:17:44.692Z"
+        },
+        {
+          "role": "bot",
+          "content": "Ciao! Sono felice di aiutarti!\n\nLa scoperta dell'America è un evento complesso e ancora oggi oggetto di dibattito tra gli storici. Tuttavia, si può dire che il viaggio di Cristoforo Colombo nel 1492 fu l'inizio della colonizzazione europea delle Americhe.\n\nTuttavia, se cerchi una data specifica per la scoperta dell'America, è importante notare che ci sono diverse teorie e interpretazioni. Alcuni storici credono che gli indigeniAmericani fossero già presenti sulle Americhe prima dell'arrivo degli europei.\n\nSe vuoi sapere di più sulla storia dell'esplorazione americana o su un argomento specifico, sono qui per aiutarti!",
+          "timestamp": "2026-02-19T09:18:27.159Z"
+        }
+      ],
+      "createdAt": "2026-02-19T09:19:23.954Z",
+      "updatedAt": "2026-02-19T09:19:46.616Z"
+    }
+  ]
 }

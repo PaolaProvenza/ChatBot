@@ -1,140 +1,51 @@
-# 🦙 Guida Installazione Ollama - NovAI
+# NovAI — Guida rapida (leggere prima di tutto)
 
-## Cos'è Ollama?
-Ollama è un software che permette di eseguire modelli AI direttamente sul tuo computer, **gratuitamente** e **senza internet** dopo il download iniziale!
+Questa è l'unica guida da seguire per avviare il progetto.
 
-## Requisiti Minimi
-- **Windows 10/11**, macOS, o Linux
-- **8GB RAM** minimo (16GB consigliati)
-- **Spazio disco**: ~1.3GB per il modello gemma:2b (ultra leggero)
+## Cosa serve prima di iniziare (una tantum, solo la prima volta)
 
+1. **Node.js** (versione LTS) — https://nodejs.org
+2. **Ollama** (il motore di IA locale) — https://ollama.com
+   - Scaricalo, installalo, avvialo. Su Windows e macOS parte già in background da solo dopo l'installazione.
+3. Aprire un terminale (o Prompt dei comandi) e digitare:
+   ```
+   ollama pull llama3.2
+   ```
+   Questo scarica il modello AI usato dal progetto (~2 GB, richiede qualche minuto). **Importante:** deve essere esattamente `llama3.2`, perché è il modello impostato di default dentro `backend/server.js`. Se un domani si vuole cambiare modello, va cambiato in entrambi i posti (qui e nel codice).
 
+## Come avviare il progetto (ogni volta)
 
----
+1. Assicurarsi che Ollama sia in esecuzione (icona nella barra di sistema, oppure lanciare `ollama serve` da terminale).
+2. Aprire un terminale dentro la cartella `backend`.
+3. (Solo se manca la cartella `node_modules`/da errori, di norma è già inclusa nello zip) eseguire:
+   ```
+   npm install
+   ```
+4. Avviare il server:
+   ```
+   npm start
+   ```
+5. Aprire il browser su:
+   ```
+   http://localhost:8080
+   ```
 
-## Installazione Passo Passo
+ATTENZIONE: **Non aprire mai `frontend/index.html` con doppio click, e non usare `python -m http.server`.** Il login, la registrazione e la chat funzionano solo passando dal server Node su `http://localhost:8080`: sono l'unico punto d'accesso che gestisce le relative funzionalità.
 
-### 1. Scarica Ollama
-Vai su: **https://ollama.com** e clicca "Download"
+## Come si chiude tutto
 
-### 2. Installa Ollama
-- Esegui il file scaricato
-- Segui la procedura di installazione
-- Al termine, Ollama si avvierà automaticamente
+1. Nella finestra dove gira `npm start`, premere `CTRL + C`.
+2. Se avviato, chiudere anche la finestra/terminale di `ollama serve`.
 
-### 3. Scarica il Modello AI
-Apri il terminale (cmd su Windows) ed esegui:
+## Risoluzione problemi
 
-```bash
-ollama pull gemma:2b
-```
-
-Questo scarica il modello gemma:2b (~1.3GB). Attendi il completamento.
-
-
-
-### 4. Avvia Ollama
-Sempre nel terminale, esegui:
-
-```bash
-ollama run gemma:2b
-```
-
-
-
-Vedrai un prompt `>>>` - Ollama è pronto!
-
-### 5. Avvia il Server NovAI
-In un NUOVO terminale (lascia aperto quello di Ollama):
-
-```bash
-cd c:/Users/User/Desktop/ChatBot/backend
-npm start
-```
-
-### 6. Apri l'App
-Vai su: **http://localhost:8080**
+| Problema | Causa probabile | Soluzione |
+|---|---|---|
+| "Ollama non è in esecuzione" nella chat | Ollama non è stato avviato | Avviare Ollama (o lo script automatico lo fa da solo) |
+| "Modello non trovato" | `llama3.2` non è stato scaricato | `ollama pull llama3.2` |
+| Login/registrazione non rispondono | È stato aperto `index.html` col doppio click, o si è usato un server diverso da quello Node | Avviare sempre tramite `npm start` e usare `http://localhost:8080` |
+| "La porta 8080 è già in uso" | Un'altra istanza del server è già attiva | Chiudere l'altra finestra/processo, oppure riavviare il PC |
+| `npm start` dà errori su moduli mancanti | `node_modules` danneggiata o incompleta | Eseguire `npm install` dentro `backend` |
 
 ---
-
-## Verifica Funzionamento
-
-Nella chat di NovAI dovresti vedere:
-- 🟢 **"🦙 AI Locale Attiva"** - Tutto funziona!
-- 🟠 **"🦙 Modello non trovato"** - Esegui `ollama pull gemma:2b`
-- 🔴 **"🦙 Ollama Offline"** - Avvia Ollama con `ollama run gemma:2b`
-
-
-
----
-
-## Comandi Utili Ollama
-
-| Comando | Descrizione |
-|---------|-------------|
-| `ollama list` | Mostra modelli installati |
-| `ollama pull gemma:2b` | Scarica modello |
-| `ollama run gemma:2b` | Avvia modello |
-| `ollama rm gemma:2b` | Rimuove modello |
-
-| `ollama --version` | Versione Ollama |
-
-
----
-
-## Modelli Alternativi (Opzionale)
-
-Se gemma:2b è troppo pesante, prova modelli più leggeri:
-
-```bash
-# Phi-3 Mini (più leggero)
-ollama pull phi3:mini
-
-# Phi-3 (versione base)
-ollama pull phi3
-```
-
-Poi modifica il file `backend/server.js`:
-```javascript
-const OLLAMA_MODEL = "phi3:mini"; // o "phi3"
-```
-
-
-
----
-
-## Risoluzione Problemi
-
-### ❌ "Ollama non è connesso"
-- Verifica che Ollama sia avviato: `ollama run gemma:2b`
-- Controlla che la porta 11434 sia libera
-
-### ❌ Errore "model not found"
-- Scarica il modello: `ollama pull gemma:2b`
-
-
-
-### ❌ Risposte lente
-- Il primo avvio è più lento (caricamento in memoria)
-- I modelli successivi saranno più veloci
-- Considera un modello più leggero se necessario
-
----
-
-## Vantaggi di Ollama
-
-✅ **Gratuito** - Nessun costo, nessuna API key  
-✅ **Privacy** - I dati restano sul tuo PC  
-✅ **Offline** - Funziona senza internet  
-✅ **Veloce** - Nessuna latenza di rete  
-✅ **Personalizzabile** - Scegli il modello che preferisci  
-
----
-
-## Hai Bisogno di Aiuto?
-
-1. Controlla che Ollama sia in esecuzione: http://localhost:11434
-2. Verifica i log del server: guarda il terminale dove hai avviato `npm start`
-3. Riavvia entrambi: chiudi e riavvia Ollama, poi il server NovAI
-
-**Buona chat con la tua AI locale! 🦙✨**
+Buona chat con NovAI! 🦙
